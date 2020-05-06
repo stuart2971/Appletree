@@ -10,7 +10,8 @@ import "./styles/scss/style.scss";
 
 import OrderForm from "./vendors/OrderForm/OrderForm.component";
 import CardGrid from "./vendors/FoodItemCards/CardGrid.component";
-import MenuAccordian from "./vendors/MenuItem/MenuAccordian.component";
+import MenuTabular from "./vendors/MenuItem/MenuTabular.component";
+import ChefCardGrid from "./vendors/ChefCards/ChefCardGrid.component";
 
 export default class Home extends React.Component {
     render() {
@@ -100,7 +101,7 @@ export default class Home extends React.Component {
                             <h4 className="intro-title">Food Menu</h4>
                             <h2>Delicious food</h2>
                         </div>
-                        <MenuAccordian />
+                        <MenuTabular />
                     </div>
                 </section>
                 <section className="cta-area text-center">
@@ -116,47 +117,8 @@ export default class Home extends React.Component {
                             <h4 className="intro-title">Our Chef</h4>
                             <h2>Talent & experience member</h2>
                         </div>
-
-                        <div className="row">
-                            <div className="col-sm-6 col-lg-4 mb-4 mb-lg-0">
-                                <div className="chef-card">
-                                    <img className="card-img rounded-0" src="img/home/chef-1.jpg" alt="" />
-                                    <div className="chef-footer">
-                                        <h4>Henry Fong</h4>
-                                        <p>Executive Chef</p>
-                                    </div>
-
-                                    <div className="chef-overlay">
-                                        <ul className="social-icons">
-                                            <li><a href="#"><i className="ti-facebook"></i></a></li>
-                                            <li><a href="#"><i className="ti-twitter-alt"></i></a></li>
-                                            <li><a href="#"><i className="ti-skype"></i></a></li>
-                                            <li><a href="#"><i className="ti-vimeo-alt"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-sm-6 col-lg-4 mb-4 mb-lg-0">
-                                <div className="chef-card">
-                                    <img className="card-img rounded-0" src="img/home/chef-2.jpg" alt="" />
-                                    <div className="chef-footer">
-                                        <h4>Christie Sychangco</h4>
-                                        <p>Executive Chef</p>
-                                    </div>
-
-                                    <div className="chef-overlay">
-                                        <ul className="social-icons">
-                                            <li><a href="#"><i className="ti-facebook"></i></a></li>
-                                            <li><a href="#"><i className="ti-twitter-alt"></i></a></li>
-                                            <li><a href="#"><i className="ti-skype"></i></a></li>
-                                            <li><a href="#"><i className="ti-vimeo-alt"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+ 
+                        <ChefCardGrid />
                     </div>
                 </section>
                 <OrderForm />
