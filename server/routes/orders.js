@@ -9,20 +9,22 @@ router.route("/show").get((req, res) => {
 })
 
 //Add an order
-router.route("/add").post((req, res) => {
+router.route("/add").post((req, res) => { 
     let newOrder = new Order({
         name: req.body.name,
         price: req.body.price,
+        address: req.body.address,
         sandwichType: req.body.sandwichType,
         toppings: req.body.toppings,
         spice: req.body.spice,
-        cheese: req.body.cheese,
+        cheeseType: req.body.cheeseType,
         phoneNumber: req.body.phoneNumber,
-        date: req.body.date
+        date: req.body.date,
+        imageProfileNumber: Math.floor(Math.random() * 12)
     })
     newOrder.save()
-        .then(() => res.json("User added")) 
-        .catch(err => res.status(400).json("Error: ", err))
+        .then(() => res.json("Order added")) 
+        .catch(err => res.status(400).json({err}))
 })
 
 //Remove an order

@@ -26,12 +26,12 @@ export default class Home extends React.Component {
                             </div>
                             <ul className="hero-info d-none d-lg-block">
                                 <li>
-                                    <img src="/images/fas-service-icon.png" />
+                                    <img src="/images/Home/fas-service-icon.png" />
 
                                     <h4>Fast Service</h4>
                                 </li>
                                 <li>
-                                    <img src="/images/fresh-food-icon.png" alt="" />
+                                    <img src="/images/Home/fresh-food-icon.png" alt="" />
                                     <h4>Fresh Food</h4>
                                 </li>
                             </ul>
@@ -52,7 +52,7 @@ export default class Home extends React.Component {
                             <div className="col-md-6 col-xl-6 mb-5 mb-md-0 pb-5 pb-md-0">
                                 <div className="img-styleBox">
                                     <div className="styleBox-border">
-                                        <img className="styleBox-img1 img-fluid" src="/images/storefront.jpg" alt="" />
+                                        <img className="styleBox-img1 img-fluid" src="/images/Home/storefront.jpg" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -83,7 +83,7 @@ export default class Home extends React.Component {
                     <div className="container">
                         <div className="row no-gutters">
                             <div className="col-sm">
-                                <img className="card-img rounded-0" src="/images/offer-img.jpg" alt="" />
+                                <img className="card-img rounded-0" src="/images/Home/offer-img.jpg" alt="" />
                             </div>
                             <div className="col-sm">
                                 <div className="offer-card offer-card-position">

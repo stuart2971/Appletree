@@ -1,12 +1,14 @@
+//When starting the web app from local machine, you have to start the server first, then client
+
 import React from 'react';
 import {BrowserRouter as Router, Route} from "react-router-dom"
-
-
 
 import Home from "./components/Home/Home.component"
 import Orders from "./components/Orders/Orders.component"
 
+
 function App() {
+    
     return (
       <Router>
           <Route path="/" exact component={Home} />
@@ -14,5 +16,6 @@ function App() {
       </Router>
     );
 }
+
 
 export default App;

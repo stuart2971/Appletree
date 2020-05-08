@@ -10,6 +10,10 @@ const orderSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    address: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
         default: calcTime("-5.0")
@@ -26,13 +30,13 @@ const orderSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    cheese: {
+    cheeseType: {
         type: String,
         required: true
     },
     phoneNumber: {
         type: String,
-        required: true
+        required: true,
     },
     isCompleted: {
         type:Boolean,
@@ -41,6 +45,10 @@ const orderSchema = mongoose.Schema({
     formattedDate: {
         type: String, 
         default: date.format(calcTime("-5.0"), 'hh:mm A')
+    },
+    imageProfileNumber: {
+        type: Number,
+        required: true
     }
 })
 
