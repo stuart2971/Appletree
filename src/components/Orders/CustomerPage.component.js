@@ -10,7 +10,7 @@ export default class CustomerPage extends React.Component{
         super(props)
     }
     render(){
-        let orders = this.props.orders.map((order, index) => {
+        let orders = this.props.sandwiches.map((order, index) => {
             if(order.phoneNumber == this.props.password )
                 return <Grid.Column><AdminCard order={order} isAdmin={false} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
             else
@@ -25,13 +25,21 @@ export default class CustomerPage extends React.Component{
                             <h2>Your order will be shown here</h2>
                         </div>
                         <Divider horizontal>Sandwiches</Divider>
-                        <div className="row">
-                            <Grid stackable columns={3}>
-                                {orders}
-                            </Grid>
-                        </div>
+                        <Grid stackable columns={3}>
+                            {orders}
+                        </Grid>
                         <Divider horizontal>Fries</Divider>
                         <Divider horizontal>Completed Orders</Divider>
+                        <Grid stackable columns={3}>
+                            {this.props.completedOrders.map((order, index) => 
+                                <Grid.Column>
+                                <CustomerCard
+                                    name={order.name} 
+                                    queue={index+1}
+                                    imgFile={this.props.profileImages[order.imageProfileNumber]}/>
+                                </Grid.Column>)
+                            }
+                        </Grid>
                     </div>
                 </section>
                 

@@ -60,4 +60,4 @@ function calcTime(offset) {
     return nd
 }
 
-module.exports = mongoose.model("Order", orderSchema)
+module.exports = mongoose.model("Sandwich", orderSchema)

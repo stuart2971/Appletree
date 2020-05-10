@@ -94,7 +94,7 @@ export default class OrderForm extends React.Component{
             return <Label pointing>Please enter a value</Label>;
     }
     updateTextBox(e, data){
-        if(data.placeholder == "Name")
+        if(data.placeholder == "First and Last Name")
             this.setState({ name: data.value });
         if(data.placeholder == "Phone Number")
             this.setState({ phoneNumber: data.value });
@@ -156,7 +156,7 @@ export default class OrderForm extends React.Component{
                                 <Header as='h1'>Make a Sandwich</Header>
 
                                 <div className="form-group">
-                                    <Input fluid placeholder="Name" onChange={this.updateTextBox.bind(this)} />
+                                    <Input fluid placeholder="First and Last Name" onChange={this.updateTextBox.bind(this)} />
                                     {this.checkInput(this.state.name.split(" ").join("") === "")}
                                 </div>
                                 <div className="form-group">

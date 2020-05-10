@@ -4,12 +4,13 @@ import { Grid, Divider } from 'semantic-ui-react'
 
 import AdminCard from "./AdminCard.component"
 
+
 export default class AdminPage extends React.Component{
     constructor(props){
         super(props)
     }
     render(){
-        let orders = this.props.orders
+        let sandwiches = this.props.sandwiches
         return(
             <div>
                 <section className="section-margin">
@@ -19,9 +20,8 @@ export default class AdminPage extends React.Component{
                             <h2>Your order will be shown here</h2>
                         </div>
                         <Divider horizontal>Sandwiches</Divider>
-                        <div className="row">
                             <Grid stackable columns={3}>
-                                {orders.map((order, index) => 
+                                {sandwiches.map((order, index) => 
                                     <Grid.Column>
                                     <AdminCard 
                                         order={order} 
@@ -32,9 +32,19 @@ export default class AdminPage extends React.Component{
                                 }
                                 
                             </Grid>
-                        </div>
                         <Divider horizontal>Fries</Divider>
                         <Divider horizontal>Completed Orders</Divider>
+                        <Grid stackable columns={3}>
+                            {this.props.completedOrders.map((order, index) => 
+                                <Grid.Column>
+                                <AdminCard 
+                                    order={order} 
+                                    isAdmin={true}
+                                    queue={index+1}
+                                    imgFile={this.props.profileImages[order.imageProfileNumber]}/>
+                                </Grid.Column>)
+                            }
+                        </Grid>
                     </div>
                 </section>
                 

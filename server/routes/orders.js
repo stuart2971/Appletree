@@ -1,16 +1,16 @@
 const router = require("express").Router()
-const Order = require("../models/Order.model")
+const Sandwich = require("../models/Sandwich.model")
 
 //Show all Orders
 router.route("/show").get((req, res) => {
-    Order.find()
+    Sandwich.find()
         .then(orders => res.json(orders))
         .catch(err => res.status(400).json("Error: ", err))
 })
 
 //Add an order
 router.route("/add").post((req, res) => { 
-    let newOrder = new Order({
+    let newOrder = new Sandwich({
         name: req.body.name,
         price: req.body.price,
         address: req.body.address,
@@ -29,7 +29,7 @@ router.route("/add").post((req, res) => {
 
 //Remove an order
 router.route("/remove/:id").delete((req, res) => {
-    Order.deleteOne({ _id: req.params.id })
+    Sandwich.deleteOne({ _id: req.params.id })
         .then(() => res.json("Deleted Successfully"))
         .catch(err => res.status(400).json("Error: ", err))
     console.log(req.params)
@@ -37,7 +37,7 @@ router.route("/remove/:id").delete((req, res) => {
 
 //Update an order (mark as complete)
 router.route("/update/:id").put((req, res) => {
-    Order.updateOne({
+    Sandwich.updateOne({
         _id: req.params.id
     }, { 
         $set: { 
