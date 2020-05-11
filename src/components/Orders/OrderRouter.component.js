@@ -12,7 +12,8 @@ export default class OrderRouter extends React.Component{
             password: "",
             sandwiches: [],
             completedOrders: [],
-            profileImages: ["ade.jpg", "chris.jpg", "daniel.jpg", "elliot.jpg", "matthew.png", "molly.png", "nan.jpg", "patrick.png", "rachel.png", "steve.jpg", "stevie.jpg", "veronika.jpg"]
+            profileImages: ["ade.jpg", "chris.jpg", "daniel.jpg", "elliot.jpg", "matthew.png", "molly.png", "nan.jpg", "patrick.png", "rachel.png", "steve.jpg", "stevie.jpg", "veronika.jpg", "christian.jpg", "helen.jpg"],
+            nextInQueue: ""
         }
     }
     componentWillMount(){
@@ -29,6 +30,7 @@ export default class OrderRouter extends React.Component{
                     else sandwiches.push(order);
                 }
                 this.setState({ completedOrders, sandwiches })
+                this.updateNextInQueue()
                 if(err) console.log(err)
             })
             .catch(function (error) {
@@ -38,10 +40,13 @@ export default class OrderRouter extends React.Component{
     findOrderById(id){
         //return the array and index of order
         let orderArr = {}
-        for(let i = 0; i < this.state.sandwiches.length; i++){
-            if(this.state.sandwiches[i]._id == id) {
+        let sandwiches = this.state.sandwiches
+        for(let i = 0; i < sandwiches.length; i++){
+            //While looping through the array, update the value of nextInQueue
+            if(!sandwiches[i].takeout) this.setState({ nextInQueue: sandwiches[i].phoneNumber }) 
+            if(sandwiches[i]._id == id) {
                 orderArr.arrName = "sandwiches";
-                orderArr.arr = this.state.sandwiches;
+                orderArr.arr = sandwiches;
                 orderArr.index = i;                
                 return orderArr;
             }
@@ -59,13 +64,14 @@ export default class OrderRouter extends React.Component{
         let sandwiches = this.state.sandwiches;
         sandwiches.push(order);
         this.setState({ sandwiches })
+        this.updateNextInQueue()
     }
     deleteOrder(id){
         let orderArrayData = this.findOrderById(id)
-        console.log(orderArrayData)
         orderArrayData.arr.splice(orderArrayData.index, 1)
         if(orderArrayData.arrName == "sandwiches") this.setState({ sandwiches: orderArrayData.arr })
         if(orderArrayData.arrName == "completedOrders") this.setState({ completedOrders: orderArrayData.arr })
+        this.updateNextInQueue()
     }
     completeOrder(id){
         let orderArrayData = this.findOrderById(id);
@@ -80,31 +86,36 @@ export default class OrderRouter extends React.Component{
             sandwiches.splice(orderArrayData.index, 1)
             this.setState({ sandwiches })
         }
-        
+        this.updateNextInQueue()
     }
     componentDidMount(){
         let pusher = new Pusher('bebb9d52f8b135fdd6d0', {
             cluster: 'us2'
         });
-    
         let channel = pusher.subscribe('orders');
         channel.bind('update', (data) => this.completeOrder(data._id));
         channel.bind('delete', (data) => this.deleteOrder(data._id));
         channel.bind('insert', (data) => this.addToSandwiches(data.insertData));
     }
+    updateNextInQueue(){
+        let sandwiches = this.state.sandwiches
+        for(let i = 0; i < sandwiches.length; i++)
+            if(!sandwiches[i].takeout){ this.setState({ nextInQueue: sandwiches[i].phoneNumber });return; }
+    }
     render(){
-        console.log(this.state.sandwiches)
         if(this.state.password == "password"){
             return <AdminPage 
                         sandwiches={this.state.sandwiches} 
                         profileImages={this.state.profileImages} 
-                        completedOrders={this.state.completedOrders}/>
+                        completedOrders={this.state.completedOrders}
+                        nextInQueue={this.state.nextInQueue}/>
         }else{
             return <CustomerPage 
                         sandwiches={this.state.sandwiches} 
                         profileImages={this.state.profileImages} 
                         password={this.state.password} 
-                        completedOrders={this.state.completedOrders}/>
+                        completedOrders={this.state.completedOrders}
+                        nextInQueue={this.state.nextInQueue}/>
         }
         
     }

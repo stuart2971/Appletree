@@ -1,4 +1,5 @@
 import React from "react"
+import { Menu } from 'semantic-ui-react'
 
 import "./Home.css";
 import "./styles/vendors/bootstrap.min.css";
@@ -121,6 +122,7 @@ export default class Home extends React.Component {
                         <ChefCardGrid />
                     </div>
                 </section>
+                
                 <OrderForm />
             </div>
             

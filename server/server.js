@@ -39,7 +39,6 @@ db.once("open", () => {
     const changeStream = taskCollection.watch();
 
     changeStream.on('change', (change) => {
-        console.log(change)
         //change.operationType depends on what change was made to the db
         pusher.trigger('orders', change.operationType, {
             _id: change.documentKey._id,

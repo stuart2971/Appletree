@@ -1,6 +1,5 @@
 import React from "react"
-import axios from "axios"
-import { Grid, Divider } from 'semantic-ui-react'
+import { Grid, Divider, Statistic } from 'semantic-ui-react'
 
 import AdminCard from "./AdminCard.component"
 
@@ -19,6 +18,10 @@ export default class AdminPage extends React.Component{
                             <h4 className="intro-title">Food Orders in Progress</h4>
                             <h2>Your order will be shown here</h2>
                         </div>
+                        <Statistic size={"large"}>
+                            <Statistic.Label>Order Next: </Statistic.Label>
+                            <Statistic.Value>#{this.props.nextInQueue}</Statistic.Value>
+                        </Statistic>
                         <Divider horizontal>Sandwiches</Divider>
                             <Grid stackable columns={3}>
                                 {sandwiches.map((order, index) => 

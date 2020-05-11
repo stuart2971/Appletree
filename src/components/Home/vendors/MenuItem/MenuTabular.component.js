@@ -6,7 +6,7 @@ import FriesGrid from './FriesGrid.component';
 import BeveragesGrid from "./BeveragesGrid.component";
 
 const panes = [
-  { menuItem: 'Burgers', render: () => <SandwichGrid /> },
+  { menuItem: 'Sandwiches', render: () => <SandwichGrid /> },
   { menuItem: 'Fries', render: () => <FriesGrid /> },
   { menuItem: 'Beverages', render: () => <BeveragesGrid /> },
 ]

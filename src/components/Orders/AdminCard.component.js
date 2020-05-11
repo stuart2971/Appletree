@@ -37,16 +37,17 @@ export default class AdminCard extends React.Component{
         </Card.Content>
       )
     }
+    let personContact = order.phoneNumber.length < 10 ? `${order.address}${order.phoneNumber}`:`${order.address}, ${order.phoneNumber}`
     return(
       <Card.Group>
         <Card>
           <Card.Content>
             <Image floated='right' size='mini' src={"/images/Orders/ProfileImages/" + this.props.imgFile} />
             <Card.Header>{order.name}</Card.Header>
-            <Card.Meta>{order.address}, {order.phoneNumber} <br /> Queue: {this.props.queue}</Card.Meta>
+            <Card.Meta> {personContact}<br /> Queue: {this.props.queue}</Card.Meta>
             <Card.Description>
             <hr />
-              {order.spice == "None"? "": order.spice} {order.sandwichType.charAt(0).toUpperCase() + order.sandwichType.slice(1)} with {order.cheeseType}
+              {order.spice == "None"? "": order.spice} {order.sandwichType} sandwich with {order.cheeseType}
               <br />
               {order.toppings.map((topping) => {
                 return topping + " "
@@ -61,9 +62,3 @@ export default class AdminCard extends React.Component{
     )
   }
 }
-// const deleteOrder = (id) =>{
-//   
-// }
-// function completeOrder(id){
-//   console.log("Pressed", id)
-// }

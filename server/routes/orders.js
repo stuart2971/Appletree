@@ -20,7 +20,8 @@ router.route("/add").post((req, res) => {
         cheeseType: req.body.cheeseType,
         phoneNumber: req.body.phoneNumber,
         date: req.body.date,
-        imageProfileNumber: Math.floor(Math.random() * 12)
+        imageProfileNumber: Math.floor(Math.random() * 14),
+        takeout: req.body.takeout
     })
     newOrder.save()
         .then(() => res.json("Order added")) 
@@ -32,7 +33,6 @@ router.route("/remove/:id").delete((req, res) => {
     Sandwich.deleteOne({ _id: req.params.id })
         .then(() => res.json("Deleted Successfully"))
         .catch(err => res.status(400).json("Error: ", err))
-    console.log(req.params)
 })
 
 //Update an order (mark as complete)

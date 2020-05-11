@@ -49,6 +49,10 @@ const orderSchema = mongoose.Schema({
     imageProfileNumber: {
         type: Number,
         required: true
+    },
+    takeout: {
+        type: Boolean, 
+        required: true
     }
 })
 

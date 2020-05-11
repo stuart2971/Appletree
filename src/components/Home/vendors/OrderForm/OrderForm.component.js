@@ -1,5 +1,5 @@
 import React from "react"
-import { Header, Dropdown, Input, Checkbox, Segment, Form, Loader, Label, Grid, Radio } from 'semantic-ui-react'
+import { Header, Dropdown, Input, Checkbox, Segment, Form, Loader, Label, Menu, Radio } from 'semantic-ui-react'
 
 
 import "./OrderForm.css";
@@ -66,30 +66,37 @@ export default class OrderForm extends React.Component{
             ],
             orderSuccessful: false,
             orderAttempts: 0,
-            orderPlaced: false
+            orderPlaced: false,
+            orderType: "Sandwich",
+            takeout: false
         }
     }
     assembleSandwich(){
 
         //Credits to https://stackoverflow.com/questions/34698905/how-can-i-clone-a-javascript-object-except-for-one-key        
-        let {dropdownSandwichOptions, dropdownCheeseOptions, ...sandwich} = this.state;
-    
-        if(this.state.name.split(" ").join("") == "" |
-           this.state.phoneNumber.split(" ").join("") == "" | 
-           this.state.address.split(" ").join("") == "" |
-           this.state.sandwichType == "" | 
-           this.state.cheeseType == ""){
+        //Gets state except for certain values
+        let {dropdownSandwichOptions, dropdownCheeseOptions, orderType, activeOrder, ...sandwich} = this.state;
+        if(!this.state.takeout){
+            sandwich.address = "Dine in.  Order #"; 
+            sandwich.phoneNumber = Math.floor(Math.random() * 1000).toString()
+            this.setState({ phoneNumber: sandwich.phoneNumber })
+        }
+        if(sandwich.name.split(" ").join("") == "" |
+           sandwich.phoneNumber.split(" ").join("") == "" | 
+           sandwich.address.split(" ").join("") == "" |
+           sandwich.sandwichType == "" | 
+           sandwich.cheeseType == ""){
                this.setState({ orderAttempts: this.state.orderAttempts + 1 })
                return
         }
         this.setState({ orderPlaced: true})
         insertOrder(sandwich, (res) => {
-            console.log("Order made successfully", res)
             if(res.status == 200)
                 this.setState({ orderSuccessful: true})
         });
     }
     checkInput(emptyBlank){
+        if(this.state.takeout & (this.state.address === "" | this.state.phoneNumber === "")) return
         if(emptyBlank & this.state.orderAttempts > 0)
             return <Label pointing>Please enter a value</Label>;
     }
@@ -137,7 +144,19 @@ export default class OrderForm extends React.Component{
         let path = window.location.href
         window.location = path.substring(0, path.lastIndexOf("/")) + "/ShowOrders/" + this.state.phoneNumber
     }
+    changeOrderType(e, { name }){ this.setState({ orderType: name }) }
+    triggerTakeout(){ this.setState({ takeout: !this.state.takeout }) }
     render(){  
+        let orderType = this.state.orderType
+        let isTakeout = this.state.takeout ?
+        <div><div className="form-group">
+            <Input fluid placeholder="Address" onChange={this.updateTextBox.bind(this)} />
+            {this.checkInput(this.state.address.split(" ").join("") === "")}
+        </div>
+        <div className="form-group">
+            <Input fluid placeholder="Phone Number" icon="phone" onChange={this.updateTextBox.bind(this)} />
+            {this.checkInput(this.state.phoneNumber.split(" ").join("") === "")}
+        </div></div> : <div></div>
         return(
             <section className="bg-lightGray section-padding">
                 <div id="OrderForm"></div>
@@ -154,19 +173,16 @@ export default class OrderForm extends React.Component{
                         <div className="col-md-6 offset-xl-2 col-xl-5">
                             <div className="search-wrapper">
                                 <Header as='h1'>Make a Sandwich</Header>
-
+                                <Menu tabular>
+                                    <Menu.Item name='Sandwich' active={orderType === 'Sandwich'} onClick={this.changeOrderType.bind(this)} />
+                                    <Menu.Item name='Fries' active={orderType === 'Fries'} onClick={this.changeOrderType.bind(this)} />
+                                </Menu>
                                 <div className="form-group">
+                                    <Checkbox label='Takeout' onChange={this.triggerTakeout.bind(this)}/>
                                     <Input fluid placeholder="First and Last Name" onChange={this.updateTextBox.bind(this)} />
                                     {this.checkInput(this.state.name.split(" ").join("") === "")}
                                 </div>
-                                <div className="form-group">
-                                    <Input fluid placeholder="Address" onChange={this.updateTextBox.bind(this)} />
-                                    {this.checkInput(this.state.address.split(" ").join("") === "")}
-                                </div>
-                                <div className="form-group">
-                                    <Input fluid placeholder="Phone Number" icon="phone" onChange={this.updateTextBox.bind(this)} />
-                                    {this.checkInput(this.state.phoneNumber.split(" ").join("") === "")}
-                                </div>
+                                {isTakeout}
                                 <div className="form-group">
                                     <div className="input-group">
                                         <Dropdown
