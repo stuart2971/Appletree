@@ -1,8 +1,8 @@
 import React from "react"
 import { Grid, Divider, Statistic } from 'semantic-ui-react'
 
-import AdminCard from "./AdminCard.component"
-import CustomerCard from "./CustomerCard.component"
+import AdminCard from "./vendors/AdminCard.component"
+import CustomerCard from "./vendors/CustomerCard.component"
 
 
 export default class CustomerPage extends React.Component{

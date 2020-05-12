@@ -1,7 +1,7 @@
 import React from "react"
 import { Grid, Divider, Statistic } from 'semantic-ui-react'
 
-import AdminCard from "./AdminCard.component"
+import AdminCard from "./vendors/AdminCard.component"
 
 
 export default class AdminPage extends React.Component{
