@@ -17,10 +17,30 @@ const orderSchema = mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    type: {
+    friesType: {
         type: String,
         required: true
-    }
+    },
+    spice: {
+        type: String,
+        required: true
+    },
+    phoneNumber: {
+        type: String,
+        required: true
+    },
+    imageProfileNumber: {
+        type: Number,
+        required:true
+    },
+    takeout: {
+        type: Boolean,
+        required: true
+    },
+    isCompleted: {
+        type:Boolean,
+        default: false
+    },
 })
 
 

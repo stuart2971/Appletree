@@ -1,8 +1,7 @@
 import React from 'react'
-import { Button, Card, Image } from 'semantic-ui-react'
-import axios from "axios";
+import { Card, Image } from 'semantic-ui-react'
 
-const CustomerCard = ({ name, queue, imgFile }) => {
+const CustomerFriesCard = ({ name, queue, imgFile }) => {
     return(
       <Card.Group>
         <Card>
@@ -15,4 +14,4 @@ const CustomerCard = ({ name, queue, imgFile }) => {
       </Card.Group>
     )
 }
-export default CustomerCard
+export default CustomerFriesCard

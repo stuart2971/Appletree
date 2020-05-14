@@ -1,8 +1,20 @@
 import axios from "axios";
 
-function insertOrder(o, callback){
+function insertSandwich(o, callback){
   let {orderSuccessful, orderAttempts, orderPlaced, ...order} = o;
-    axios.post('/orders/add', order)
+    axios.post('/sandwich/add', order)
+      .then( (response, err) =>{
+        callback(response)
+      })
+      .catch(function (error) {
+        callback(error);
+      })
+      .finally(function () {
+        // always executed
+      });  
+}
+function insertFries(o, callback){
+    axios.post('/fries/add', o)
       .then( (response, err) =>{
         callback(response)
       })
@@ -14,4 +26,4 @@ function insertOrder(o, callback){
       });  
 }
 
-export {insertOrder};
+export { insertSandwich, insertFries };

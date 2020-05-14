@@ -1,20 +1,27 @@
 import React from "react"
 import { Grid, Divider, Statistic } from 'semantic-ui-react'
 
-import AdminCard from "./vendors/AdminCard.component"
-import CustomerCard from "./vendors/CustomerCard.component"
-
+import AdminSandiwchCard from "./vendors/AdminSandwichCard.component"
+import CustomerSandwichCard from "./vendors/CustomerSandwichCard.component"
+import AdminFriesCard from "./vendors/AdminFriesCard.component"
+import CustomerFriesCard from "./vendors/CustomerFriesCard.component"
 
 export default class CustomerPage extends React.Component{
     constructor(props){
         super(props)
     }
     render(){
-        let orders = this.props.sandwiches.map((order, index) => {
+        let sandwiches = this.props.sandwiches.map((order, index) => {
             if(order.phoneNumber == this.props.password )
-                return <Grid.Column><AdminCard order={order} isAdmin={false} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
+                return <Grid.Column><AdminSandiwchCard order={order} isAdmin={false} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
             else
-                return <Grid.Column><CustomerCard name={order.name} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
+                return <Grid.Column><CustomerSandwichCard name={order.name} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
+        })
+        let fries = this.props.fries.map((order, index) => {
+            if(order.phoneNumber == this.props.password )
+                return <Grid.Column><AdminFriesCard order={order} isAdmin={false} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
+            else
+                return <Grid.Column><CustomerFriesCard name={order.name} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
         })
         return(
             <div>
@@ -30,14 +37,17 @@ export default class CustomerPage extends React.Component{
                         </Statistic>
                         <Divider horizontal>Sandwiches</Divider>
                         <Grid stackable columns={3}>
-                            {orders}
+                            {sandwiches}
                         </Grid>
                         <Divider horizontal>Fries</Divider>
+                        <Grid stackable columns={3}>
+                            {fries}
+                        </Grid> 
                         <Divider horizontal>Completed Orders</Divider>
                         <Grid stackable columns={3}>
                             {this.props.completedOrders.map((order, index) => 
                                 <Grid.Column>
-                                <CustomerCard
+                                <CustomerSandwichCard
                                     name={order.name} 
                                     queue={index+1}
                                     imgFile={this.props.profileImages[order.imageProfileNumber]}/>

@@ -11,42 +11,45 @@ export default class OrderRouter extends React.Component{
         this.state = {
             password: "",
             sandwiches: [],
+            fries: [],
             completedOrders: [],
             profileImages: ["ade.jpg", "chris.jpg", "daniel.jpg", "elliot.jpg", "matthew.png", "molly.png", "nan.jpg", "patrick.png", "rachel.png", "steve.jpg", "stevie.jpg", "veronika.jpg", "christian.jpg", "helen.jpg"],
-            nextInQueue: ""
+            nextInQueue: []
         }
     }
     componentWillMount(){
         let url = this.props.location.pathname
         let password = url.substring(url.lastIndexOf("/")+1)
         this.setState({ password })
-        axios.get('/orders/show')
+        axios.get('/sandwich/show')
             .then((response, err) => {
-                let completedOrders = this.state.completedOrders;
-                let sandwiches = this.state.sandwiches;
-                for(let i = 0; i < response.data.length; i++){
-                    let order = response.data[i]
-                    if(order.isCompleted) completedOrders.push(order);
-                    else sandwiches.push(order);
-                }
-                this.setState({ completedOrders, sandwiches })
-                this.updateNextInQueue()
+                this.insertOrders(response.data, this.state.sandwiches, "sandwiches")
                 if(err) console.log(err)
             })
-            .catch(function (error) {
-                console.log(error)
+
+        axios.get('/fries/show')
+            .then((response, err) => {
+                this.insertOrders(response.data, this.state.fries, "fries")
+                if(err) console.log(err)
             })
     }
     findOrderById(id){
-        //return the array and index of order
+        //Try to find a way to retrieve the documents faster by entering another parameter indicating which array to check first
         let orderArr = {}
         let sandwiches = this.state.sandwiches
         for(let i = 0; i < sandwiches.length; i++){
-            //While looping through the array, update the value of nextInQueue
-            if(!sandwiches[i].takeout) this.setState({ nextInQueue: sandwiches[i].phoneNumber }) 
             if(sandwiches[i]._id == id) {
                 orderArr.arrName = "sandwiches";
                 orderArr.arr = sandwiches;
+                orderArr.index = i;                
+                return orderArr;
+            }
+        }
+        let fries = this.state.fries
+        for(let i = 0; i < fries.length; i++){
+            if(fries[i]._id == id) {
+                orderArr.arrName = "fries";
+                orderArr.arr = fries;
                 orderArr.index = i;                
                 return orderArr;
             }
@@ -60,31 +63,41 @@ export default class OrderRouter extends React.Component{
             }
         }
     }
-    addToSandwiches(order){
-        let sandwiches = this.state.sandwiches;
-        sandwiches.push(order);
-        this.setState({ sandwiches })
+    insertOrders(orders, orderArr, orderType){
+        let orderArray = orderArr;
+        let completedOrders = this.state.completedOrders
+        for(let i = 0; i < orders.length; i++){
+            let order = orders[i]
+            if(order.isCompleted) completedOrders.push(order)
+            else orderArray.push(order)
+        }
+        if(orderType == "sandwiches") this.setState({ sandwiches: orderArray, completedOrders })
+        else if(orderType == "fries") this.setState({ fries: orderArray, completedOrders }) 
         this.updateNextInQueue()
     }
     deleteOrder(id){
         let orderArrayData = this.findOrderById(id)
         orderArrayData.arr.splice(orderArrayData.index, 1)
         if(orderArrayData.arrName == "sandwiches") this.setState({ sandwiches: orderArrayData.arr })
-        if(orderArrayData.arrName == "completedOrders") this.setState({ completedOrders: orderArrayData.arr })
+        else if(orderArrayData.arrName == "fries") this.setState({ fries: orderArrayData.arr })
+        else if(orderArrayData.arrName == "completedOrders") this.setState({ completedOrders: orderArrayData.arr })
         this.updateNextInQueue()
     }
     completeOrder(id){
         let orderArrayData = this.findOrderById(id);
-
         let completedOrders = this.state.completedOrders
         orderArrayData.arr[orderArrayData.index].isCompleted = true;
         completedOrders.push(orderArrayData.arr[orderArrayData.index])
-        this.setState({ completedOrders })
 
         if(orderArrayData.arrName == "sandwiches") {
             let sandwiches = this.state.sandwiches
             sandwiches.splice(orderArrayData.index, 1)
-            this.setState({ sandwiches })
+            this.setState({ sandwiches, completedOrders })
+        }
+        if(orderArrayData.arrName == "fries") {
+            let fries = this.state.fries
+            fries.splice(orderArrayData.index, 1)
+            this.setState({ fries, completedOrders })
         }
         this.updateNextInQueue()
     }
@@ -92,10 +105,15 @@ export default class OrderRouter extends React.Component{
         let pusher = new Pusher('bebb9d52f8b135fdd6d0', {
             cluster: 'us2'
         });
-        let channel = pusher.subscribe('orders');
-        channel.bind('update', (data) => this.completeOrder(data._id));
-        channel.bind('delete', (data) => this.deleteOrder(data._id));
-        channel.bind('insert', (data) => this.addToSandwiches(data.insertData));
+        let sandwichChannel = pusher.subscribe('sandwichChange');
+        sandwichChannel.bind('update', (data) => this.completeOrder(data._id));
+        sandwichChannel.bind('delete', (data) => this.deleteOrder(data._id));
+        sandwichChannel.bind('insert', (data) => this.insertOrders([data.insertData], this.state.sandwiches, "sandwiches"));
+
+        let friesChannel = pusher.subscribe('friesChange');
+        friesChannel.bind('update', (data) => this.completeOrder(data._id));
+        friesChannel.bind('delete', (data) => this.deleteOrder(data._id));
+        friesChannel.bind('insert', (data) => this.insertOrders([data.insertData], this.state.fries, "fries"));
     }
     updateNextInQueue(){
         let sandwiches = this.state.sandwiches
@@ -105,13 +123,15 @@ export default class OrderRouter extends React.Component{
     render(){
         if(this.state.password == "password"){
             return <AdminPage 
-                        sandwiches={this.state.sandwiches} 
+                        sandwiches={this.state.sandwiches}
+                        fries={this.state.fries}
                         profileImages={this.state.profileImages} 
                         completedOrders={this.state.completedOrders}
                         nextInQueue={this.state.nextInQueue}/>
         }else{
             return <CustomerPage 
                         sandwiches={this.state.sandwiches} 
+                        fries={this.state.fries}
                         profileImages={this.state.profileImages} 
                         password={this.state.password} 
                         completedOrders={this.state.completedOrders}

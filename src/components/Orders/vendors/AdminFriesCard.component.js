@@ -2,9 +2,9 @@ import React from 'react'
 import { Button, Card, Image } from 'semantic-ui-react'
 import axios from "axios";
 
-export default class AdminCard extends React.Component{
+export default class AdminFriesCard extends React.Component{
   completeCard(){
-    axios.put(`/orders/update/${this.props.order._id}`)
+    axios.put(`/fries/update/${this.props.order._id}`)
       .then((res, err) => {
         console.log(res, err)
       })
@@ -13,7 +13,7 @@ export default class AdminCard extends React.Component{
       })
   }
   deleteCard(){
-    axios.delete(`/orders/remove/${this.props.order._id}`)
+    axios.delete(`/fries/remove/${this.props.order._id}`)
       .then( (res, err) => {
           console.log(res, err)
       })
@@ -47,11 +47,7 @@ export default class AdminCard extends React.Component{
             <Card.Meta> {personContact}<br /> Queue: {this.props.queue}</Card.Meta>
             <Card.Description>
             <hr />
-              {order.spice == "None"? "": order.spice} {order.sandwichType} sandwich with {order.cheeseType}
-              <br />
-              {order.toppings.map((topping) => {
-                return topping + " "
-              })}
+              {order.spice == "None"? "": order.spice} {order.friesType} fries
               <br />
               ${order.price}
             </Card.Description>

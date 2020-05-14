@@ -1,7 +1,7 @@
 import React from "react"
 import { Header, Dropdown, Input, Checkbox, Segment, Form, Loader, Label, Radio } from 'semantic-ui-react'
 
-import { insertOrder } from "./ProcessOrder";
+import { insertSandwich } from "./ProcessOrder";
 
 export default class SandwichOrderForm extends React.Component{
     constructor(props){
@@ -64,7 +64,7 @@ export default class SandwichOrderForm extends React.Component{
 
         //Credits to https://stackoverflow.com/questions/34698905/how-can-i-clone-a-javascript-object-except-for-one-key        
         //Gets state except for certain values
-        let {dropdownSandwichOptions, dropdownCheeseOptions, orderType, activeOrder, ...sandwich} = this.state;
+        let {dropdownSandwichOptions, dropdownCheeseOptions, ...sandwich} = this.state;
         if(!this.state.takeout){
             sandwich.address = "Dine in.  Order #"; 
             sandwich.phoneNumber = Math.floor(Math.random() * 1000).toString()
@@ -78,8 +78,9 @@ export default class SandwichOrderForm extends React.Component{
                this.setState({ orderAttempts: this.state.orderAttempts + 1 })
                return
         }
+        
         this.setState({ orderPlaced: true})
-        insertOrder(sandwich, (res) => {
+        insertSandwich(sandwich, (res) => {
             if(res.status == 200)
                 this.setState({ orderSuccessful: true})
         });
