@@ -7,21 +7,18 @@ import AdminFriesCard from "./vendors/AdminFriesCard.component"
 import CustomerFriesCard from "./vendors/CustomerFriesCard.component"
 
 export default class CustomerPage extends React.Component{
-    constructor(props){
-        super(props)
-    }
     render(){
         let sandwiches = this.props.sandwiches.map((order, index) => {
-            if(order.phoneNumber == this.props.password )
+            if(order.phoneNumber === this.props.password )
                 return <Grid.Column><AdminSandiwchCard order={order} isAdmin={false} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
             else
-                return <Grid.Column><CustomerSandwichCard name={order.name} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
+                return <Grid.Column><CustomerSandwichCard name={order.name} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]} isCompleted={false}/></Grid.Column>
         })
         let fries = this.props.fries.map((order, index) => {
-            if(order.phoneNumber == this.props.password )
+            if(order.phoneNumber === this.props.password )
                 return <Grid.Column><AdminFriesCard order={order} isAdmin={false} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
             else
-                return <Grid.Column><CustomerFriesCard name={order.name} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]}/></Grid.Column>
+                return <Grid.Column><CustomerFriesCard name={order.name} queue={index+1} imgFile={this.props.profileImages[order.imageProfileNumber]} isCompleted={false}/></Grid.Column>
         })
         return(
             <div>
@@ -50,7 +47,8 @@ export default class CustomerPage extends React.Component{
                                 <CustomerSandwichCard
                                     name={order.name} 
                                     queue={index+1}
-                                    imgFile={this.props.profileImages[order.imageProfileNumber]}/>
+                                    imgFile={this.props.profileImages[order.imageProfileNumber]}
+                                    isCompleted={true}/>
                                 </Grid.Column>)
                             }
                         </Grid>

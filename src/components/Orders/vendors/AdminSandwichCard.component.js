@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card, Image } from 'semantic-ui-react'
+import { Button, Card, Image, Icon } from 'semantic-ui-react'
 import axios from "axios";
 
 export default class AdminSandwichCard extends React.Component{
@@ -43,7 +43,7 @@ export default class AdminSandwichCard extends React.Component{
         <Card>
           <Card.Content>
             <Image floated='right' size='mini' src={"/images/Orders/ProfileImages/" + this.props.imgFile} />
-            <Card.Header>{order.name}</Card.Header>
+            <Card.Header>{order.name}{order.isCompleted ? <Icon name="check circle" />: <div></div>}</Card.Header>
             <Card.Meta> {personContact}<br /> Queue: {this.props.queue}</Card.Meta>
             <Card.Description>
             <hr />

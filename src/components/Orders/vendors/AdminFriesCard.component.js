@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card, Image } from 'semantic-ui-react'
+import { Button, Card, Image, Icon } from 'semantic-ui-react'
 import axios from "axios";
 
 export default class AdminFriesCard extends React.Component{
@@ -37,17 +37,17 @@ export default class AdminFriesCard extends React.Component{
         </Card.Content>
       )
     }
-    let personContact = order.phoneNumber.length < 10 ? `${order.address}${order.phoneNumber}`:`${order.address}, ${order.phoneNumber}`
+    let personContact = order.phoneNumber.length < 10 ? `${order.address}Order #${order.phoneNumber}`:`${order.address}, ${order.phoneNumber}`
     return(
       <Card.Group>
         <Card>
           <Card.Content>
             <Image floated='right' size='mini' src={"/images/Orders/ProfileImages/" + this.props.imgFile} />
-            <Card.Header>{order.name}</Card.Header>
+            <Card.Header>{order.name}{order.isCompleted ? <Icon name="check circle" />: <div></div>}</Card.Header>
             <Card.Meta> {personContact}<br /> Queue: {this.props.queue}</Card.Meta>
             <Card.Description>
             <hr />
-              {order.spice == "None"? "": order.spice} {order.friesType} fries
+              {order.friesType == "spicy"? `${order.spice} spicy`: order.friesType} fries
               <br />
               ${order.price}
             </Card.Description>
