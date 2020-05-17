@@ -55,7 +55,7 @@ const orderSchema = mongoose.Schema({
         required: true
     }
 })
-
+ 
 //Stolen from 'Sudhir Bastakoti', https://stackoverflow.com/questions/8207655/get-time-of-specific-timezone
 function calcTime(offset) {
     var d = new Date();

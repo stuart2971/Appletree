@@ -1,5 +1,5 @@
 import React from "react"
-import { Grid, Divider, Statistic } from 'semantic-ui-react'
+import { Grid, Divider } from 'semantic-ui-react'
 
 import AdminSandwichCard from "./vendors/AdminSandwichCard.component"
 import AdminFriesCard from "./vendors/AdminFriesCard.component"
@@ -36,33 +36,43 @@ export default class AdminPage extends React.Component{
     }
     renderNextInQueue(sandwiches, fries){
         if(sandwiches.length != 0 & fries.length != 0){
-        let sandwichNextInQueue = sandwiches[0].phoneNumber;
-        let friesNextInQueue = fries[0].phoneNumber
+        let sandwichNextInQueue
+        for(let i = 0; i < sandwiches.length; i++) {
+            if(sandwiches[i].phoneNumber.length < 10){
+                sandwichNextInQueue = sandwiches[i]
+            }
+        }
+        let friesNextInQueue
+        for(let i = 0; i < fries.length; i++) {
+            if(fries[i].phoneNumber.length < 10){
+                friesNextInQueue = fries[i]
+            }
+        }
         return (
-            <Grid columns={2} divided>
+            <Grid columns={2}>
                 <Grid.Row>
                     <Grid.Column>
-                        <h1>Upcoming Sandwich: {sandwichNextInQueue.length < 10 ? `#${sandwichNextInQueue}`: `Takeout.  Phone #${sandwichNextInQueue}`}</h1>
+                        <h1>Upcoming Sandwich: #{sandwichNextInQueue.phoneNumber}</h1>
                     </Grid.Column>
                     <Grid.Column>
-                        <h1>Upcoming Fries: {friesNextInQueue.length < 10 ? `#${friesNextInQueue}`: `Takeout.  Phone #${friesNextInQueue}`}</h1>
+                        <h1>Upcoming Fries: #{friesNextInQueue.phoneNumber}</h1>
                     </Grid.Column>
                 </Grid.Row>
                 
                 <Grid.Row>
                     <Grid.Column>
                         <AdminSandwichCard 
-                            order={sandwiches[0]} 
+                            order={sandwichNextInQueue} 
                             isAdmin={true}
                             queue={"In Progress"}
-                            imgFile={this.props.profileImages[sandwiches[0].imageProfileNumber]}/>
+                            imgFile={this.props.profileImages[sandwichNextInQueue.imageProfileNumber]}/>
                     </Grid.Column>
                     <Grid.Column>
                         <AdminFriesCard 
-                            order={fries[0]} 
+                            order={friesNextInQueue} 
                             isAdmin={true}
                             queue={"In Progress"}
-                            imgFile={this.props.profileImages[fries[0].imageProfileNumber]}/>
+                            imgFile={this.props.profileImages[friesNextInQueue.imageProfileNumber]}/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

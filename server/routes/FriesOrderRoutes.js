@@ -7,7 +7,7 @@ router.route("/show").get((req, res) => {
         .then(orders => res.json(orders))
         .catch(err => res.status(400).json("Error: ", err))
 })
-
+ 
 //Add an order
 router.route("/add").post((req, res) => { 
     let newOrder = new Fries({
