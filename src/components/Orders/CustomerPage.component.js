@@ -7,6 +7,24 @@ import AdminFriesCard from "./vendors/AdminFriesCard.component"
 import CustomerFriesCard from "./vendors/CustomerFriesCard.component"
 
 export default class CustomerPage extends React.Component{
+    renderNextInQueue(sandwiches, fries){
+        if(sandwiches.length != 0 & fries.length != 0){
+            let sandwichNextInQueue
+            for(let i = 0; i < sandwiches.length; i++) {
+                if(sandwiches[i].phoneNumber.length < 10){
+                    sandwichNextInQueue = sandwiches[i]
+                }
+            }
+            let friesNextInQueue
+            for(let i = 0; i < fries.length; i++) {
+                if(fries[i].phoneNumber.length < 10){
+                    friesNextInQueue = fries[i]
+                }
+            }
+            return <Statistic.Value>#{sandwichNextInQueue.phoneNumber} | #{friesNextInQueue.phoneNumber}</Statistic.Value>
+        }else return <div></div>
+        
+    }
     render(){
         let sandwiches = this.props.sandwiches.map((order, index) => {
             if(order.phoneNumber === this.props.password )
@@ -29,8 +47,8 @@ export default class CustomerPage extends React.Component{
                             <h2>Your order will be shown here</h2>
                         </div>
                         <Statistic size={"large"}>
-                            <Statistic.Label>Order Next: </Statistic.Label>
-                            <Statistic.Value>#{this.props.nextInQueue}</Statistic.Value>
+                            <Statistic.Label>Order Next (sandwiches | fries): </Statistic.Label>
+                            {this.renderNextInQueue(this.props.sandwiches, this.props.fries)}
                         </Statistic>
                         <Divider horizontal>Sandwiches</Divider>
                         <Grid stackable columns={3}>

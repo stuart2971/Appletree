@@ -47,11 +47,13 @@ export default class AdminSandwichCard extends React.Component{
             <Card.Meta> {personContact}<br /> Queue: {this.props.queue}</Card.Meta>
             <Card.Description>
             <hr />
-              {order.spice == "None"? "": order.spice} {order.sandwichType} sandwich with {order.cheeseType}
+              <b>{order.spice == "None"? "": order.spice} {order.sandwichType}</b> sandwich with <b>{order.cheeseType}</b>
               <br />
-              {order.toppings.map((topping) => {
-                return topping + " "
-              })}
+              <b>
+                {order.toppings.map((topping) => {
+                  return topping + " "
+                })}
+              </b>
               <br />
               ${order.price}
             </Card.Description>

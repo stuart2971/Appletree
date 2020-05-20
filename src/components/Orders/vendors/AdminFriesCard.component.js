@@ -47,7 +47,7 @@ export default class AdminFriesCard extends React.Component{
             <Card.Meta> {personContact}<br /> Queue: {this.props.queue}</Card.Meta>
             <Card.Description>
             <hr />
-              {order.friesType == "spicy"? `${order.spice} spicy`: order.friesType} fries
+              <b>{order.friesType == "spicy"? `${order.spice} spicy`: order.friesType} fries</b>
               <br />
               ${order.price}
             </Card.Description>

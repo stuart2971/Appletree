@@ -58,13 +58,13 @@ export default class SandwichOrderForm extends React.Component{
             orderSuccessful: false,
             orderAttempts: 0,
             orderPlaced: false,
+            loaded:false
         }
     }
     assembleSandwich(){
-
         //Credits to https://stackoverflow.com/questions/34698905/how-can-i-clone-a-javascript-object-except-for-one-key        
         //Gets state except for certain values
-        let {dropdownSandwichOptions, dropdownCheeseOptions, ...sandwich} = this.state;
+        let {dropdownSandwichOptions, dropdownCheeseOptions, loaded, ...sandwich} = this.state;
         if(!this.state.takeout){
             sandwich.address = "Dine in.  Order #"; 
             sandwich.phoneNumber = Math.floor(Math.random() * 1000).toString()
@@ -142,7 +142,7 @@ export default class SandwichOrderForm extends React.Component{
             <div className="form-group">
                 <Input fluid placeholder="Phone Number" icon="phone" onChange={this.updateTextBox.bind(this)} />
                 {this.checkInput(this.state.phoneNumber.split(" ").join("") === "")}
-            </div></div> : <div></div>
+            </div></div>:<div></div>
 
         return(
             <div>

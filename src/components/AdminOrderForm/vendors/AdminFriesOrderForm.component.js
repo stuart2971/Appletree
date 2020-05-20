@@ -46,9 +46,9 @@ export default class AdminSandwichOrderForm extends React.Component{
         let attempts = this.state.orderAttempts > 0
         let spiceOptions = this.state.friesType == "spicy" ?
                             <Grid.Row className={this.state.spice == "" & attempts ? "missing_field": ""}>
-                                <Grid.Column><h1 className={this.state.spice == "A little spicy" ? "selected": ""} onClick={() => this.setState({ spice: "A little spicy" })}>A little Spicy</h1></Grid.Column>
-                                <Grid.Column><h1 className={this.state.spice == "Medium Spicy" ? "selected": ""} onClick={() => this.setState({ spice: "Medium Spicy" })}>Medium</h1></Grid.Column>
-                                <Grid.Column><h1 className={this.state.spice == "Spicy" ? "selected": ""} onClick={() => this.setState({ spice: "Spicy" })}>Spicy</h1></Grid.Column>
+                                <Grid.Column><h1 className={this.state.spice == "A little" ? "selected": ""} onClick={() => this.setState({ spice: "A little" })}>A little Spicy</h1></Grid.Column>
+                                <Grid.Column><h1 className={this.state.spice == "Medium" ? "selected": ""} onClick={() => this.setState({ spice: "Medium" })}>Medium</h1></Grid.Column>
+                                <Grid.Column><h1 className={this.state.spice == "Very" ? "selected": ""} onClick={() => this.setState({ spice: "Very" })}>Spicy</h1></Grid.Column>
                             </Grid.Row>:<div></div>
         return(
             <div style={{padding: "30px"}}>

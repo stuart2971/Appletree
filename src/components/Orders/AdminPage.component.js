@@ -36,47 +36,47 @@ export default class AdminPage extends React.Component{
     }
     renderNextInQueue(sandwiches, fries){
         if(sandwiches.length != 0 & fries.length != 0){
-        let sandwichNextInQueue
-        for(let i = 0; i < sandwiches.length; i++) {
-            if(sandwiches[i].phoneNumber.length < 10){
-                sandwichNextInQueue = sandwiches[i]
+            let sandwichNextInQueue
+            for(let i = 0; i < sandwiches.length; i++) {
+                if(sandwiches[i].phoneNumber.length < 10){
+                    sandwichNextInQueue = sandwiches[i]
+                }
             }
-        }
-        let friesNextInQueue
-        for(let i = 0; i < fries.length; i++) {
-            if(fries[i].phoneNumber.length < 10){
-                friesNextInQueue = fries[i]
+            let friesNextInQueue
+            for(let i = 0; i < fries.length; i++) {
+                if(fries[i].phoneNumber.length < 10){
+                    friesNextInQueue = fries[i]
+                }
             }
-        }
-        return (
-            <Grid columns={2}>
-                <Grid.Row>
-                    <Grid.Column>
-                        <h1>Upcoming Sandwich: #{sandwichNextInQueue.phoneNumber}</h1>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <h1>Upcoming Fries: #{friesNextInQueue.phoneNumber}</h1>
-                    </Grid.Column>
-                </Grid.Row>
-                
-                <Grid.Row>
-                    <Grid.Column>
-                        <AdminSandwichCard 
-                            order={sandwichNextInQueue} 
-                            isAdmin={true}
-                            queue={"In Progress"}
-                            imgFile={this.props.profileImages[sandwichNextInQueue.imageProfileNumber]}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <AdminFriesCard 
-                            order={friesNextInQueue} 
-                            isAdmin={true}
-                            queue={"In Progress"}
-                            imgFile={this.props.profileImages[friesNextInQueue.imageProfileNumber]}/>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
-        )
+            return (
+                <Grid columns={2}>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <h1>Upcoming Sandwich: #{sandwichNextInQueue.phoneNumber}</h1>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <h1>Upcoming Fries: #{friesNextInQueue.phoneNumber}</h1>
+                        </Grid.Column>
+                    </Grid.Row>
+                    
+                    <Grid.Row>
+                        <Grid.Column>
+                            <AdminSandwichCard 
+                                order={sandwichNextInQueue} 
+                                isAdmin={true}
+                                queue={"In Progress"}
+                                imgFile={this.props.profileImages[sandwichNextInQueue.imageProfileNumber]}/>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <AdminFriesCard 
+                                order={friesNextInQueue} 
+                                isAdmin={true}
+                                queue={"In Progress"}
+                                imgFile={this.props.profileImages[friesNextInQueue.imageProfileNumber]}/>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            )
         }else return <div></div>
     }
     render(){
