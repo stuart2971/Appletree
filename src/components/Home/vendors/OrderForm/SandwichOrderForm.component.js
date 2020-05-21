@@ -1,7 +1,12 @@
 import React from "react"
 import { Header, Dropdown, Input, Checkbox, Segment, Form, Loader, Label, Radio } from 'semantic-ui-react'
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 import { insertSandwich } from "./ProcessOrder";
+import CheckoutForm from "./PaymentSection.component"
+
+const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
 
 export default class SandwichOrderForm extends React.Component{
     constructor(props){
@@ -61,9 +66,13 @@ export default class SandwichOrderForm extends React.Component{
             loaded:false
         }
     }
+    paymentForm(){
+        return CheckoutForm();
+    }
     assembleSandwich(){
         //Credits to https://stackoverflow.com/questions/34698905/how-can-i-clone-a-javascript-object-except-for-one-key        
         //Gets state except for certain values
+        
         let {dropdownSandwichOptions, dropdownCheeseOptions, loaded, ...sandwich} = this.state;
         if(!this.state.takeout){
             sandwich.address = "Dine in.  Order #"; 
@@ -143,7 +152,7 @@ export default class SandwichOrderForm extends React.Component{
                 <Input fluid placeholder="Phone Number" icon="phone" onChange={this.updateTextBox.bind(this)} />
                 {this.checkInput(this.state.phoneNumber.split(" ").join("") === "")}
             </div></div>:<div></div>
-
+        
         return(
             <div>
                 <div className="form-group">
@@ -241,13 +250,18 @@ export default class SandwichOrderForm extends React.Component{
                     </Form>
                 </Segment>
                 </div>
-                <Header as='h3'>Price: ${this.state.price}</Header>
+                
 
                 {this.showOrderMessage()}
-                <div id="order_button" className="form-group form-group-position">
-                    <button className="button border-0" onClick={this.assembleSandwich.bind(this)}>Order Now</button>
-                </div>
+                <Elements stripe={promise}>
+                    <CheckoutForm />
+                </Elements>
+                <Header as='h3'>Price: ${this.state.price}</Header>
+
             </div>
         )
     }
 }
+// <div id="order_button" className="form-group form-group-position">
+//     <button type="submit" className="button border-0" onClick={this.assembleSandwich.bind(this)}>Order Now</button>
+// </div>

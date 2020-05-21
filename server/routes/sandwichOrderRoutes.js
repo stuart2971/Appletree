@@ -1,6 +1,8 @@
 const router = require("express").Router()
 const Sandwich = require("../models/Sandwich.model")
 
+const stripe = require("stripe")("sk_test_V9Z4esZ11zDmYD5PUfIH8riz");
+
 //Show all Orders
 router.route("/show").get((req, res) => {
     Sandwich.find()
@@ -9,7 +11,7 @@ router.route("/show").get((req, res) => {
 })
 
 //Add an order
-router.route("/add").post((req, res) => { 
+router.route("/add").post(async (req, res) => { 
     let newOrder = new Sandwich({
         name: req.body.name,
         price: req.body.price,
@@ -23,6 +25,14 @@ router.route("/add").post((req, res) => {
         imageProfileNumber: Math.floor(Math.random() * 14),
         takeout: req.body.takeout
     })
+
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: 1000,
+        currency: "usd"
+    });
+    res.send({
+        clientSecret: paymentIntent.client_secret
+    });
     newOrder.save()
         .then(() => res.json("Order added")) 
         .catch(err => res.status(400).json({err}))
