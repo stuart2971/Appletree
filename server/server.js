@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
 const Pusher = require("pusher");
+const path = require("path")
 
 const sandwichRouter = require("./routes/sandwichOrderRoutes")
 const FriesRouter = require("./routes/FriesOrderRoutes")
@@ -10,10 +11,18 @@ require("dotenv").config();
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/sandwich", sandwichRouter)
 app.use("/fries", FriesRouter)
+
+app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -35,6 +44,7 @@ var pusher = new Pusher({
 
 db.once("open", () => {
     console.log("Connected to db")
+    
     app.listen(process.env.PORT || 3001, () => {
         console.log("Listening on port 3001")
     });

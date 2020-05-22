@@ -2,6 +2,7 @@ import axios from "axios";
 
 function insertSandwich(o, callback){
   let {orderSuccessful, orderAttempts, orderPlaced, ...order} = o;
+  console.log(order)
     axios.post('/sandwich/add', order)
       .then( (response, err) =>{
         callback(response)

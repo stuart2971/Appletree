@@ -12,6 +12,7 @@ router.route("/show").get((req, res) => {
 
 //Add an order
 router.route("/add").post(async (req, res) => { 
+    console.log("showing sandwiches")
     let newOrder = new Sandwich({
         name: req.body.name,
         price: req.body.price,

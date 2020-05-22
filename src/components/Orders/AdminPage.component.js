@@ -82,7 +82,6 @@ export default class AdminPage extends React.Component{
     render(){
         let sandwiches = this.props.sandwiches
         let fries = this.props.fries
-        console.log(sandwiches)
         return(
             <div>
                 <section className="section-margin">

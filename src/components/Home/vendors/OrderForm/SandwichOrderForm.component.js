@@ -1,12 +1,12 @@
 import React from "react"
 import { Header, Dropdown, Input, Checkbox, Segment, Form, Loader, Label, Radio } from 'semantic-ui-react'
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
+// import { Elements } from "@stripe/react-stripe-js";
 
 import { insertSandwich } from "./ProcessOrder";
-import CheckoutForm from "./PaymentSection.component"
+// import CheckoutForm from "./PaymentSection.component"
 
-const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
+// const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
 
 export default class SandwichOrderForm extends React.Component{
     constructor(props){
@@ -66,13 +66,10 @@ export default class SandwichOrderForm extends React.Component{
             loaded:false
         }
     }
-    paymentForm(){
-        return CheckoutForm();
-    }
     assembleSandwich(){
         //Credits to https://stackoverflow.com/questions/34698905/how-can-i-clone-a-javascript-object-except-for-one-key        
         //Gets state except for certain values
-        
+        console.log("assembling")
         let {dropdownSandwichOptions, dropdownCheeseOptions, loaded, ...sandwich} = this.state;
         if(!this.state.takeout){
             sandwich.address = "Dine in.  Order #"; 
@@ -253,11 +250,11 @@ export default class SandwichOrderForm extends React.Component{
                 
 
                 {this.showOrderMessage()}
-                <Elements stripe={promise}>
-                    <CheckoutForm />
-                </Elements>
-                <Header as='h3'>Price: ${this.state.price}</Header>
 
+                <Header as='h3'>Price: ${this.state.price}</Header>
+                <div id="order_button" className="form-group form-group-position">
+                    <button type="submit" className="button border-0" onClick={this.assembleSandwich.bind(this)}>Order Now</button>
+                </div>
             </div>
         )
     }

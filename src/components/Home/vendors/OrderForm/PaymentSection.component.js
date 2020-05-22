@@ -20,24 +20,12 @@ export default function CheckoutForm() {
   useEffect(() => {
     axios.post('/sandwich/add', JSON.stringify({a: 1}))
       .then( (response, err) =>{
-        console.log("order payment done")
-      })
-    // Create PaymentIntent as soon as the page loads
-    window
-      .fetch("/sandwich/add", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({items: [{ id: "xl-tshirt" }]})
-      })
-      .then(res => {
-        return res.json();
+        console.log(response);
+        return response.json()
       })
       .then(data => {
         setClientSecret(data.clientSecret);
       });
-  }, []);
   const cardStyle = {
     style: {
       base: {
@@ -56,12 +44,11 @@ export default function CheckoutForm() {
     }
   };
   const handleChange = async (event) => {
-    // Listen for changes in the CardElement
-    // and display any errors as the customer types their card details
     setDisabled(event.empty);
     setError(event.error ? event.error.message : "");
   };
   const handleSubmit = async ev => {
+    console.log("pressed")
     ev.preventDefault();
     setProcessing(true);
     const payload = await stripe.confirmCardPayment(clientSecret, {
@@ -97,9 +84,7 @@ export default function CheckoutForm() {
         <span id="button-text">
           {processing ? (
             <div className="spinner" id="spinner"></div>
-          ) : (
-            "Pay"
-          )}
+          ) : "Pay"}
         </span>
       </button>
       </div>
