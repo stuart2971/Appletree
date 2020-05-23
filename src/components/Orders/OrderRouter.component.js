@@ -21,13 +21,13 @@ export default class OrderRouter extends React.Component{
         let url = this.props.location.pathname
         let password = url.substring(url.lastIndexOf("/")+1)
         this.setState({ password })
-        axios.get('/sandwich/show')
+        axios.get('https://appletree-express-server.herokuapp.com/sandwich/show')
             .then((response, err) => {
                 this.insertOrders(response.data, this.state.sandwiches, "sandwiches")
                 if(err) console.log(err)
             })
 
-        axios.get('/fries/show')
+        axios.get('https://appletree-express-server.herokuapp.com/fries/show')
             .then((response, err) => {
                 this.insertOrders(response.data, this.state.fries, "fries")
                 if(err) console.log(err)

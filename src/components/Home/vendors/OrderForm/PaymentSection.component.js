@@ -18,7 +18,7 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   useEffect(() => {
-    axios.post('/sandwich/add', JSON.stringify({a: 1}))
+    axios.post('https://appletree-express-server.herokuapp.com/sandwich/add', JSON.stringify({a: 1}))
       .then( (response, err) =>{
         console.log(response);
         return response.json()

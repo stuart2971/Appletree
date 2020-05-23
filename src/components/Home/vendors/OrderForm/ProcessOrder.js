@@ -3,7 +3,7 @@ import axios from "axios";
 function insertSandwich(o, callback){
   let {orderSuccessful, orderAttempts, orderPlaced, ...order} = o;
   console.log(order)
-    axios.post('/sandwich/add', order)
+    axios.post('https://appletree-express-server.herokuapp.com/sandwich/add', order)
       .then( (response, err) =>{
         callback(response)
       })
@@ -15,7 +15,7 @@ function insertSandwich(o, callback){
       });  
 }
 function insertFries(o, callback){
-    axios.post('/fries/add', o)
+    axios.post('https://appletree-express-server.herokuapp.com/fries/add', o)
       .then( (response, err) =>{
         callback(response)
       })

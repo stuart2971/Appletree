@@ -40,7 +40,7 @@ export default class AdminSandwichOrderForm extends React.Component{
         order.phoneNumber = Math.floor(Math.random() * 1000).toString();
         order.takeout = false;
         order.date = new Date();
-        axios.post('/sandwich/add', order)
+        axios.post('https://appletree-express-server.herokuapp.com/sandwich/add', order)
             .then( (response, err) =>{
                 this.setState({
                     name: "", 

@@ -4,7 +4,7 @@ import axios from "axios";
 
 export default class AdminSandwichCard extends React.Component{
   completeCard(){
-    axios.put(`/sandwich/update/${this.props.order._id}`)
+    axios.put(`https://appletree-express-server.herokuapp.com/sandwich/update/${this.props.order._id}`)
       .then((res, err) => {
         console.log(res, err)
       })
@@ -13,7 +13,7 @@ export default class AdminSandwichCard extends React.Component{
       })
   }
   deleteCard(){
-    axios.delete(`/sandwich/remove/${this.props.order._id}`)
+    axios.delete(`https://appletree-express-server.herokuapp.com/sandwich/remove/${this.props.order._id}`)
       .then( (res, err) => {
           console.log(res, err)
       })
