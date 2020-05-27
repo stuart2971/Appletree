@@ -1,5 +1,3 @@
-//When starting the web app from local machine, you have to start the server first, then client
-
 import React from 'react';
 import {BrowserRouter as Router, Route} from "react-router-dom"
 
