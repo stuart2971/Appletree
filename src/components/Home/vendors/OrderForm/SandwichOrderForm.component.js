@@ -266,7 +266,7 @@ export default function SandwichOrderForm(){
     const rootPanels = [
         { key: 'panel-1', title: `Step 1: Pickup or Delivery ${onStep > 0 ? "✓": ""}: ${isTakeout ? "Delivery" : "Pickup"}`, content: { content: Level1Content } },
         { key: 'panel-2', title: `Step 2: Name for the Order ${onStep > 1 ? "✓": ""}: ${name}`, content: { content: Level2Content } },
-        { key: 'panel-3', title: `Step 3: Build your Sandwich ${onStep > 2 ? "✓": ""}`, content: { content: Level3Content } },
+        { key: 'panel-3', title: `Step 3: Build your Sandwich ${onStep > 2 ? "✓": ""}: ${sandwichType}`, content: { content: Level3Content } },
         { key: 'panel-4', title: 'Step 4: Choose Payment Method', content: { content: Level4Content } },
     ]
     const loadingMessages = [
