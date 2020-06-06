@@ -176,11 +176,9 @@ export default function FriesOrderForm(){
         { key: 'panel-4', title: 'Step 4: Choose Payment Method', content: { content: Level4Content } },
     ]
     const loadingMessages = [
-        "Assembling Sandwich...",
-        "Purchasing Ingredients...",
-        "Herding Cattle...",
-        "Feeding Chickens...",
-        "Shaping Falafel"
+        "Cutting Potatos...",
+        "Deep Frying Fries...",
+        "Salting Fries..."
     ]
     return(
         <div>
