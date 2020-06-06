@@ -39,13 +39,15 @@ export default class AdminPage extends React.Component{
             let sandwichNextInQueue
             for(let i = 0; i < sandwiches.length; i++) {
                 if(sandwiches[i].phoneNumber.length < 10){
-                    sandwichNextInQueue = sandwiches[i]
+                    sandwichNextInQueue = sandwiches[i];
+                    break;
                 }
             }
             let friesNextInQueue
             for(let i = 0; i < fries.length; i++) {
                 if(fries[i].phoneNumber.length < 10){
-                    friesNextInQueue = fries[i]
+                    friesNextInQueue = fries[i];
+                    break;
                 }
             }
             return (

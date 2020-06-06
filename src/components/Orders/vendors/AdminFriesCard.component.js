@@ -37,7 +37,7 @@ export default class AdminFriesCard extends React.Component{
         </Card.Content>
       )
     }
-    let personContact = order.phoneNumber.length < 10 ? `${order.address}Order #${order.phoneNumber}`:`${order.address}, ${order.phoneNumber}`
+    let personContact = order.phoneNumber.length < 10 ? `${order.address}${order.phoneNumber}`:`${order.address}, ${order.phoneNumber}`
     return(
       <Card.Group>
         <Card>

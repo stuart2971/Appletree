@@ -1,175 +1,197 @@
-import React from "react"
-import { Header, Dropdown, Input, Checkbox, Segment, Form, Loader, Label, Radio } from 'semantic-ui-react'
+import React, {useState} from "react"
+import { Header, Input, Loader, Accordion } from 'semantic-ui-react'
+import { NeuInput } from 'neumorphic-ui';
 
-import { insertFries } from "./ProcessOrder"
+// import { loadStripe } from "@stripe/stripe-js";
+// import { Elements } from "@stripe/react-stripe-js";
 
-export default class FriesOrderForm extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = {
-            name: "",
-            phoneNumber: "",
-            address: "",
-            spice: "A little",
-            friesType: "",
-            price: "0.00",
-            takeout: false,
-            orderSuccessful: false,
-            orderAttempts: 0,
-            orderPlaced: false,
-            dropdownFriesOptions: [{
-                  key: 'Regular',
-                  text: 'Regular',
-                  value: 'regular',
-                  image: { avatar: true, src: '/images/Home/chicken_sandwich.JPG' },
-                },{
-                  key: 'Spicy',
-                  text: 'Spicy',
-                  value: 'spicy',
-                  image: { avatar: true, src: '/images/Home/featured2.jpg' },
-                },{
-                  key: 'Belgian',
-                  text: 'Belgian',
-                  value: 'belgian',
-                  image: { avatar: true, src: '/images/Home/food1.png' },
-                },{
-                    key: 'Poutine',
-                    text: 'Poutine',
-                    value: 'poutine',
-                    image: { avatar: true, src: '/images/Home/food1.png' },
-                }
-            ]
+import { insertFries } from "./ProcessOrder";
+import NextPrevButtons from "./vendors/NextPrevButtons.component";
+import "./OrderForm.css"
+// import CheckoutForm from "./PaymentSection.component"
+
+// const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
+
+export default function FriesOrderForm(){
+    const [name, setName] = useState("")
+    const [friesType, setFriesType] = useState("");
+    const [spice, setSpice] = useState("a little");
+    const [price, setPrice] = useState("0.00")
+    const [phoneNumber, setPhoneNumber] = useState("")
+    const [address, setAddress] = useState("")
+    const [onStep, setOnStep] = useState(0)
+    const [orderPlaced, setOrderPlaced] = useState(false);
+    const [orderSuccessful, setOrderSuccessful] = useState(false);
+    const assembleSandwich = () => {
+        let fries = {
+            name,
+            friesType,
+            spice,
+            price,
+            phoneNumber,
+            address,
+            takeout: true
         }
-    }
-    assembleFries(){
-        let {orderAttempts, orderPlaced, orderSuccessful, dropdownFriesOptions, ...order} = this.state
-        if(!this.state.takeout) {
-            order.address = "Dine in.  ";
-            order.phoneNumber = Math.floor(Math.random() * 1000).toString()
-            this.setState({ phoneNumber: order.phoneNumber })
+        if(isItTakeout()){
+            fries.address = "Dine in.  Order #"; 
+            fries.phoneNumber = Math.floor(Math.random() * 1000).toString()
+            setPhoneNumber(fries.phoneNumber)
+            fries.takeout = false;
         }
-        if(order.name.split(" ").join("") == "" |
-           order.phoneNumber.split(" ").join("") == "" | 
-           order.address.split(" ").join("") == "" |
-           order.friesType == ""){
-               this.setState({ orderAttempts: this.state.orderAttempts + 1 })
-               return
-        }
-        console.log(order)
-        this.setState({ orderPlaced: true})
-        insertFries(order, (res) => {
+        setOrderPlaced(true)
+        insertFries(fries, (res) => {
             console.log(res)
             if(res.status == 200)
-                this.setState({ orderSuccessful: true})
-        })
+                setOrderSuccessful(true)
+        });
+    }   
+    const NextStep = (inputs, isRequired) => {
+        let canProceed = true;
+        for(let i = 0; i < inputs.length; i++){
+            if(inputs[i].split(" ").join("") == ""){
+                canProceed = false
+            }
+        }
+        if(isRequired & !canProceed)
+            return false;
+        else if(!(isRequired & canProceed) | (isRequired & canProceed)){
+            setOnStep(onStep + 1)
+            return true
+        }
     }
-    showOrderMessage(){
-        if(this.state.orderSuccessful)
-            return (
-                <Segment inverted color='green' onClick={this.redirect.bind(this)}>
-                    Order Placed.  Click here to go see your order
-                </Segment>
-            )
-        if(!this.state.orderSuccessful & this.state.orderPlaced)
-            return <Loader active inline />
+    const PrevStep = () => {
+        if(onStep != 0) setOnStep(onStep - 1)
     }
-    redirect(){
-        let path = window.location.href
-        window.location = path.substring(0, path.lastIndexOf("/")) + "/ShowOrders/" + this.state.phoneNumber
+    const noSpace = (text) => {
+        return text.split(" ").join("")
     }
-    updateTextBox(e, data){
-        if(data.placeholder == "First and Last Name")
-            this.setState({ name: data.value });
-        if(data.placeholder == "Phone Number")
-            this.setState({ phoneNumber: data.value });
-        if(data.placeholder == "Address")
-            this.setState({ address: data.value });    
-    }
-    updateDropDown(e, data){
-        let price;
-        if(data.value == "regular") price = "4.00";
-        if(data.value == "spicy") price = "4.50";
-        if(data.value == "belgian") price = "5.00";
-        if(data.value == "poutine") price = "5.50";
-
-        this.setState({ price, friesType: data.value })
-    }
-    triggerTakeout(){ this.setState({ takeout: !this.state.takeout }) }
-    updateSpice (e, spice){ this.setState({ spice: spice.value }) }
-    checkInput(emptyBlank){
-        if(emptyBlank & this.state.orderAttempts > 0)
-            return <Label pointing>Please enter a value</Label>;
-    }
-    render(){
-        let isTakeout = this.state.takeout ?
-            <div><div className="form-group">
-                <Input fluid placeholder="Address" onChange={this.updateTextBox.bind(this)} />
-                {this.checkInput(this.state.address.split(" ").join("") === "")}
+    const spiceTypeContent = (
+        <div style={{ display: "inline-block" }}>
+            <div className={spice === "little" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                setSpice("little")
+                setOnStep(onStep + 1)
+            }}>
+                <span>🌶️</span>
             </div>
+            <div className={spice === "medium" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                setSpice("medium")
+                setOnStep(onStep + 1)
+            }}>
+                <span>🌶️🌶️</span>
+            </div>
+            <div className={spice === "hot" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                setSpice("hot")
+                setOnStep(onStep + 1)
+            }}>
+                <span>🌶️🌶️🌶️</span>
+            </div>
+        </div>
+    )
+    const Level1Content = (
+        <div>
             <div className="form-group">
-                <Input fluid placeholder="Phone Number" icon="phone" onChange={this.updateTextBox.bind(this)} />
-                {this.checkInput(this.state.phoneNumber.split(" ").join("") === "")}
-            </div></div> : <div></div>
-        let spiceLevel = this.state.friesType == "spicy" ? 
-        <Segment>
-            <Form>
-                <Form.Field>Spice Level: </Form.Field>
-                <Form.Field>
-                    <Radio
-                        label='A Little Spicy'
-                        name='radioGroup'
-                        value='A little'
-                        checked={this.state.spice === 'A little'}
-                        onChange={this.updateSpice.bind(this)}
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <Radio
-                        label='Medium Spicy'
-                        name='radioGroup'
-                        value='Medium'
-                        checked={this.state.spice === 'Medium'}
-                        onChange={this.updateSpice.bind(this)}
-                    />
-                </Form.Field>
-                <Form.Field>
-                    <Radio
-                        label='Spicy'
-                        name='radioGroup'
-                        value='Very'
-                        checked={this.state.spice === 'Very'}
-                        onChange={this.updateSpice.bind(this)}
-                    />
-                </Form.Field>
-            </Form>
-        </Segment> : <div></div>
-        return(
-            <div>
-                <div className="form-group">
-                    <Checkbox label='Takeout' onChange={this.triggerTakeout.bind(this)}/>
-                    <Input fluid placeholder="First and Last Name" onChange={this.updateTextBox.bind(this)} />
-                    {this.checkInput(this.state.name.split(" ").join("") === "")}
-                </div>
-                {isTakeout}
-                <div className="form-group">
-                    <div className="input-group">
-                        <Dropdown
-                        placeholder="Type of Fries"
-                        fluid
-                        selection
-                        options={this.state.dropdownFriesOptions}
-                        onChange={this.updateDropDown.bind(this)}
-                        />
-                        {this.checkInput(this.state.friesType.split(" ").join("") === "")}  
-                    </div>
-                </div>
-                {spiceLevel}
-                <Header as='h3'>Price: ${this.state.price}</Header>
-                {this.showOrderMessage()}
-                <div id="order_button" className="form-group form-group-position">
-                    <button className="button border-0" onClick={this.assembleFries.bind(this)}>Order Now</button>
-                </div>
-            </div>
-        )
+                <Input fluid placeholder="First and Last Name" onChange={e => setName(e.target.value) } />
+                <NextPrevButtons canProceed={noSpace(name) !== ""} step={onStep} top="18px" next={() => NextStep([name], true)} prev={() => PrevStep()} />
+            </div>         
+        </div>
+    )
+    const canProceed = () => {
+        if(friesType !== ""){
+            if(friesType === "spicy"){
+                if(spice !== "")
+                    return true;
+            }else return true
+        }
+        return false;
     }
+    const Level2Content = (
+        <div>
+            Customize your own sandwich
+            <div style={{ display: "inline-block" }}>
+            <div className={friesType === "regular" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                setOnStep(onStep + 1)
+                setFriesType("regular")
+                setPrice("4.50")
+            }}>
+                <span>Regular</span>
+            </div>
+            <div className={friesType === "spicy" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() =>{ 
+                setFriesType("spicy")
+                setPrice("5.00")
+            }}>
+                <span>Spicy</span>
+            </div>
+            <div className={friesType === "belgian" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                setOnStep(onStep + 1)
+                setFriesType("belgian")
+                setPrice("5.50")
+            }}>
+                <span>Belgian</span>
+            </div>
+            <div className={friesType === "poutine" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                setOnStep(onStep + 1)
+                setFriesType("poutine")
+                setPrice("6.00")
+            }}>
+                <span>Poutine</span>
+            </div>
+        </div>
+            {friesType === "spicy" ? spiceTypeContent : <div></div>}
+            <NextPrevButtons canProceed={friesType !== ""} step={onStep} top="10px" next={() => NextStep([friesType], true)} prev={() => PrevStep()} />
+        </div>
+    )
+    const isItTakeout = () => {
+        if(address === "" & phoneNumber === ""){
+            return true
+        }
+        if(address !== "" & phoneNumber !== ""){
+            if(phoneNumber.length === 10){
+                return true
+            }
+        }
+        return false
+    }
+    let isTakeout = isItTakeout()
+    const Level3Content = (
+        <div>
+            <p className="inactiveText"><strong>ⓘ If your order is not a takeout order it will be assumed that you will be picking your order up at restaraunt location</strong></p>
+            <Input className="margin10" fluid placeholder="Address" onChange={e => setAddress(noSpace(e.target.value))} />
+            <Input className="margin10" fluid placeholder="Phone Number" icon="phone" onChange={e => setPhoneNumber(noSpace(e.target.value))} />
+            <p style={{textAlign: "right"}}>I want my order to be <strong>{!isTakeout ? "delivered to me": "picked up at store location"}</strong></p>
+            <NextPrevButtons canProceed={isTakeout} top="10px" step={onStep} next={() => NextStep([phoneNumber, address], false)} prev={() => PrevStep()} />
+        </div>
+    )
+    const Level4Content = (
+        <div>
+            Apple Payment<br />
+            Google Payment<br />
+            Credit Payment
+            <NextPrevButtons canProceed={false} top="10px" step={onStep} next={() => NextStep([name], true)} prev={() => PrevStep()} />
+        </div>
+    )
+    const rootPanels = [
+        { key: 'panel-1', title: `Step 1: Enter Personal Information ${onStep > 0 ? "✓": ""}`, content: { content: Level1Content } },
+        { key: 'panel-2', title: `Step 2: Select Fries Type ${onStep > 1 ? "✓": ""}`, content: { content: Level2Content } },
+        { key: 'panel-3', title: `Step 3: (Optional) Delivery Information ${onStep > 2 ? "✓": ""}`, content: { content: Level3Content } },
+        { key: 'panel-4', title: 'Step 4: Choose Payment Method', content: { content: Level4Content } },
+    ]
+    const loadingMessages = [
+        "Assembling Sandwich...",
+        "Purchasing Ingredients...",
+        "Herding Cattle...",
+        "Feeding Chickens...",
+        "Shaping Falafel"
+    ]
+    return(
+        <div>
+            <Accordion activeIndex={onStep} panels={rootPanels} styled />
+            <Header as='h3'>Price: ${price}</Header>
+            <div id="order_button" className="form-group form-group-position">
+                {!orderSuccessful & orderPlaced ? 
+                    <Loader active style={{color: "black"}}>{loadingMessages[Math.floor(Math.random() * loadingMessages.length)]}</Loader> : 
+                    <button onClick={assembleSandwich} type="submit" className="NextPrevButton black NextPrevButton--quidel NextPrevButton--inverted nextStep" style={{opacity: "1", cursor: "pointer"}}>Order Now</button>
+                }
+            </div>
+        </div>
+    )
 }
