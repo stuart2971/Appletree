@@ -8,6 +8,7 @@ import { NeuInput } from 'neumorphic-ui';
 import { insertFries } from "./ProcessOrder";
 import NextPrevButtons from "./vendors/NextPrevButtons.component";
 import "./OrderForm.css"
+import SandwichOrderForm from "./SandwichOrderForm.component";
 // import CheckoutForm from "./PaymentSection.component"
 
 // const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
@@ -22,6 +23,8 @@ export default function FriesOrderForm(){
     const [onStep, setOnStep] = useState(0)
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [orderSuccessful, setOrderSuccessful] = useState(false);
+    const [isTakeout, setIsTakeout] = useState(false)
+    const [validTakeout, setValidTakeout] = useState(false) 
     const assembleSandwich = () => {
         let fries = {
             name,
@@ -30,13 +33,11 @@ export default function FriesOrderForm(){
             price,
             phoneNumber,
             address,
-            takeout: true
+            takeout: isTakeout
         }
-        if(isItTakeout()){
+        if(!fries.takeout){
             fries.address = "Dine in.  Order #"; 
             fries.phoneNumber = Math.floor(Math.random() * 1000).toString()
-            setPhoneNumber(fries.phoneNumber)
-            fries.takeout = false;
         }
         setOrderPlaced(true)
         insertFries(fries, (res) => {
@@ -87,10 +88,51 @@ export default function FriesOrderForm(){
             </div>
         </div>
     )
+    const isValidTakeout = () => {
+        if(address !== "" & phoneNumber !== ""){
+            if(phoneNumber.length + 1 === 10){
+                return true
+            }
+        }
+        return false
+    }
     const Level1Content = (
         <div>
+        <div style={{verticalAlign: "middle", display: "inline-block"}}>
+            <p style={{float: "left", display: "inline-block"}}>I want my order to be </p>
+                <div className={!isTakeout ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                    setIsTakeout(false);
+                    setValidTakeout(true);
+                }}>
+                    <span>Pickup</span>
+                </div>
+                <div className={isTakeout ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                    setIsTakeout(true)
+                    setValidTakeout(false);
+                }}>
+                    <span>Delivery</span>
+                </div>
+                
+            </div>
+            {isTakeout ? 
+                <div>
+                <Input className="margin10" fluid placeholder="Address" onChange={e => {
+                    setAddress(noSpace(e.target.value))
+                    setValidTakeout(isValidTakeout())
+                }} />
+                <Input className="margin10" fluid placeholder="Phone Number" icon="phone" onChange={e => {
+                    setPhoneNumber(noSpace(e.target.value))
+                    setValidTakeout(isValidTakeout())
+                }} /></div>: 
+                <div></div>
+            }
+            <NextPrevButtons canProceed={!isTakeout || (isTakeout && validTakeout)} top="10px" step={onStep} next={() => NextStep([phoneNumber, address], false)} prev={() => PrevStep()} />
+        </div>
+    )
+    const Level2Content = (
+        <div>
             <div className="form-group">
-                <Input fluid placeholder="First and Last Name" onChange={e => setName(e.target.value) } />
+                <Input fluid placeholder="Name" onChange={e => setName(e.target.value) } />
                 <NextPrevButtons canProceed={noSpace(name) !== ""} step={onStep} top="18px" next={() => NextStep([name], true)} prev={() => PrevStep()} />
             </div>         
         </div>
@@ -104,7 +146,8 @@ export default function FriesOrderForm(){
         }
         return false;
     }
-    const Level2Content = (
+    
+    const Level3Content = (
         <div>
             Customize your own sandwich
             <div style={{ display: "inline-block" }}>
@@ -140,27 +183,7 @@ export default function FriesOrderForm(){
             <NextPrevButtons canProceed={friesType !== ""} step={onStep} top="10px" next={() => NextStep([friesType], true)} prev={() => PrevStep()} />
         </div>
     )
-    const isItTakeout = () => {
-        if(address === "" & phoneNumber === ""){
-            return true
-        }
-        if(address !== "" & phoneNumber !== ""){
-            if(phoneNumber.length === 10){
-                return true
-            }
-        }
-        return false
-    }
-    let isTakeout = isItTakeout()
-    const Level3Content = (
-        <div>
-            <p className="inactiveText"><strong>ⓘ If your order is not a takeout order it will be assumed that you will be picking your order up at restaraunt location</strong></p>
-            <Input className="margin10" fluid placeholder="Address" onChange={e => setAddress(noSpace(e.target.value))} />
-            <Input className="margin10" fluid placeholder="Phone Number" icon="phone" onChange={e => setPhoneNumber(noSpace(e.target.value))} />
-            <p style={{textAlign: "right"}}>I want my order to be <strong>{!isTakeout ? "delivered to me": "picked up at store location"}</strong></p>
-            <NextPrevButtons canProceed={isTakeout} top="10px" step={onStep} next={() => NextStep([phoneNumber, address], false)} prev={() => PrevStep()} />
-        </div>
-    )
+    
     const Level4Content = (
         <div>
             Apple Payment<br />
@@ -170,9 +193,9 @@ export default function FriesOrderForm(){
         </div>
     )
     const rootPanels = [
-        { key: 'panel-1', title: `Step 1: Enter Personal Information ${onStep > 0 ? "✓": ""}`, content: { content: Level1Content } },
-        { key: 'panel-2', title: `Step 2: Select Fries Type ${onStep > 1 ? "✓": ""}`, content: { content: Level2Content } },
-        { key: 'panel-3', title: `Step 3: (Optional) Delivery Information ${onStep > 2 ? "✓": ""}`, content: { content: Level3Content } },
+        { key: 'panel-1', title: `Step 1: Pickup or Delivery ${onStep > 0 ? "✓": ""}`, content: { content: Level1Content } },
+        { key: 'panel-2', title: `Step 2: Name for the Order ${onStep > 1 ? "✓": ""}`, content: { content: Level2Content } },
+        { key: 'panel-3', title: `Step 3: Select Fries Type ${onStep > 2 ? "✓": ""}`, content: { content: Level3Content } },
         { key: 'panel-4', title: 'Step 4: Choose Payment Method', content: { content: Level4Content } },
     ]
     const loadingMessages = [

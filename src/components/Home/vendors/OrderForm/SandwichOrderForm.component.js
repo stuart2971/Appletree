@@ -24,8 +24,9 @@ export default function SandwichOrderForm(){
     const [onStep, setOnStep] = useState(0)
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [orderSuccessful, setOrderSuccessful] = useState(false);
+    const [isTakeout, setIsTakeout] = useState(false)
+    const [validTakeout, setValidTakeout] = useState(false)
     const assembleSandwich = () => {
-        console.log("assembling")
         let sandwich = {
             name,
             sandwichType, 
@@ -35,16 +36,13 @@ export default function SandwichOrderForm(){
             price,
             phoneNumber,
             address,
-            takeout: true
+            takeout: isTakeout
         }
-        if(isItTakeout()){
+        if(!sandwich.takeout){
             sandwich.address = "Dine in.  Order #"; 
             sandwich.phoneNumber = Math.floor(Math.random() * 1000).toString()
-            setPhoneNumber(sandwich.phoneNumber)
-            sandwich.takeout = false;
         }
         setOrderPlaced(true)
-        console.log(sandwich)
         insertSandwich(sandwich, (res) => {
             console.log(res)
             if(res.status == 200)
@@ -193,48 +191,70 @@ export default function SandwichOrderForm(){
             </div>
         </div>
     )
-    const level2Panels = [
-        { key: 'panel-2a', title: 'Sandwich Type', content: {content: sandwichTypeContent} },
-        { key: 'panel-2b', title: 'Cheese Type', content: {content: cheeseTypeContent} },
-        { key: 'panel-2c', title: 'Spice Level', content: {content: spiceTypeContent} },
-        { key: 'panel-2d', title: 'Veggies', content: {content: veggiesTypeContent} }
-    ]
+    const isValidTakeout = () => {
+        if(address !== "" && phoneNumber !== ""){
+            //adds one to length because it checks the length before updating the state.  IDK how to fix.  
+            if(phoneNumber.length + 1 === 10){
+                return true
+            }
+        }
+        return false
+    }
     const Level1Content = (
         <div>
+        <div style={{verticalAlign: "middle", display: "inline-block"}}>
+            <p style={{float: "left", display: "inline-block"}}>I want my order to be </p>
+                <div className={!isTakeout ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                    setIsTakeout(false);
+                    setValidTakeout(true);
+                }}>
+                    <span>Pickup</span>
+                </div>
+                <div className={isTakeout ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
+                    setIsTakeout(true)
+                    setValidTakeout(false);
+                }}>
+                    <span>Delivery</span>
+                </div>
+                
+            </div>
+            {isTakeout ? 
+                <div>
+                <Input className="margin10" fluid placeholder="Address" onChange={e => {
+                    setAddress(noSpace(e.target.value))
+                    setValidTakeout(isValidTakeout())
+                }} />
+                <Input className="margin10" fluid placeholder="Phone Number" icon="phone" onChange={e => {
+                    setPhoneNumber(noSpace(e.target.value))
+                    setValidTakeout(isValidTakeout())
+                }} /></div>: 
+                <div></div>
+            }
+            <NextPrevButtons canProceed={!isTakeout || (isTakeout && validTakeout)} top="10px" step={onStep} next={() => NextStep([phoneNumber, address], false)} prev={() => PrevStep()} />
+        </div>
+    )
+    const level2Panels = [
+        { key: 'panel-2a', title: `Sandwich Type: ${sandwichType}`, content: {content: sandwichTypeContent} },
+        { key: 'panel-2b', title: `Cheese Type: ${cheeseType}`, content: {content: cheeseTypeContent} },
+        { key: 'panel-2c', title: `Spice Level: ${spice}`, content: {content: spiceTypeContent} },
+        { key: 'panel-2d', title: `Veggies: ${toppings.map(topping => " " + topping)}`, content: {content: veggiesTypeContent} }
+    ]
+    const Level2Content = (
+        <div>
             <div className="form-group">
-                <Input fluid placeholder="First and Last Name" onChange={e => setName(e.target.value) } />
+                <Input fluid placeholder="Name" onChange={e => setName(e.target.value) } />
                 <NextPrevButtons canProceed={noSpace(name) !== ""} step={onStep} top="18px" next={() => NextStep([name], true)} prev={() => PrevStep()} />
             </div>         
         </div>
     )
-    const Level2Content = (
+    const Level3Content = (
         <div>
             Customize your own sandwich
             <Accordion.Accordion activeIndex={option} panels={level2Panels} onTitleClick={handleTitleClick}/>
             <NextPrevButtons canProceed={sandwichType !== "" & cheeseType !== "" & spice !== ""} step={onStep} top="10px" next={() => NextStep([sandwichType, cheeseType, spice], true)} prev={() => PrevStep()} />
         </div>
     )
-    const isItTakeout = () => {
-        if(address === "" & phoneNumber === ""){
-            return true
-        }
-        if(address !== "" & phoneNumber !== ""){
-            if(phoneNumber.length === 10){
-                return true
-            }
-        }
-        return false
-    }
-    let isTakeout = isItTakeout()
-    const Level3Content = (
-        <div>
-            <p className="inactiveText"><strong>ⓘ If your order is not a takeout order it will be assumed that you will be picking your order up at restaraunt location</strong></p>
-            <Input className="margin10" fluid placeholder="Address" onChange={e => setAddress(noSpace(e.target.value))} />
-            <Input className="margin10" fluid placeholder="Phone Number" icon="phone" onChange={e => setPhoneNumber(noSpace(e.target.value))} />
-            <p style={{textAlign: "right"}}>I want my order to be <strong>{!isTakeout ? "delivered to me": "picked up at store location"}</strong></p>
-            <NextPrevButtons canProceed={isTakeout} top="10px" step={onStep} next={() => NextStep([phoneNumber, address], false)} prev={() => PrevStep()} />
-        </div>
-    )
+    
     const Level4Content = (
         <div>
             Apple Payment<br />
@@ -244,9 +264,9 @@ export default function SandwichOrderForm(){
         </div>
     )
     const rootPanels = [
-        { key: 'panel-1', title: `Step 1: Enter Personal Information ${onStep > 0 ? "✓": ""}`, content: { content: Level1Content } },
-        { key: 'panel-2', title: `Step 2: Build your Sandwich ${onStep > 1 ? "✓": ""}`, content: { content: Level2Content } },
-        { key: 'panel-3', title: `Step 3: (Optional) Delivery Information ${onStep > 2 ? "✓": ""}`, content: { content: Level3Content } },
+        { key: 'panel-1', title: `Step 1: Pickup or Delivery ${onStep > 0 ? "✓": ""}: ${isTakeout ? "Delivery" : "Pickup"}`, content: { content: Level1Content } },
+        { key: 'panel-2', title: `Step 2: Name for the Order ${onStep > 1 ? "✓": ""}: ${name}`, content: { content: Level2Content } },
+        { key: 'panel-3', title: `Step 3: Build your Sandwich ${onStep > 2 ? "✓": ""}`, content: { content: Level3Content } },
         { key: 'panel-4', title: 'Step 4: Choose Payment Method', content: { content: Level4Content } },
     ]
     const loadingMessages = [
