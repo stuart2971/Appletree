@@ -12,7 +12,7 @@ import "./OrderForm.css"
 
 // const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
 
-export default function SandwichOrderForm(){
+export default function SandwichOrderForm({updateSandwich}){
     const [name, setName] = useState("")
     const [sandwichType, setSandwichType] = useState("")
     const [cheeseType, setCheeseType] = useState("")
@@ -21,11 +21,12 @@ export default function SandwichOrderForm(){
     const [price, setPrice] = useState("0.00")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [address, setAddress] = useState("")
-    const [onStep, setOnStep] = useState(0)
+    const [onStep, setOnStep] = useState(2)
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [orderSuccessful, setOrderSuccessful] = useState(false);
     const [isTakeout, setIsTakeout] = useState(false)
     const [validTakeout, setValidTakeout] = useState(false)
+    
     const assembleSandwich = () => {
         let sandwich = {
             name,
@@ -92,6 +93,7 @@ export default function SandwichOrderForm(){
                 setOption(option + 1)
                 setSandwichType("burger")
                 setPrice("4.87")
+                updateSandwich({ sandwichType: "burger", cheeseType, spice, toppings })
             }}>
                 <span>Burger</span>
             </div>
@@ -99,6 +101,7 @@ export default function SandwichOrderForm(){
                 setOption(option + 1)
                 setSandwichType("chicken")
                 setPrice("4.87")
+                updateSandwich({ sandwichType: "chicken", cheeseType, spice, toppings })
             }}>
                 <span>Chicken</span>
             </div>
@@ -106,6 +109,7 @@ export default function SandwichOrderForm(){
                 setOption(option + 1)
                 setSandwichType("falafel")
                 setPrice("3.81")
+                updateSandwich({ sandwichType: "falafel", cheeseType, spice, toppings })
             }}>
                 <span>Falafel</span>
             </div>
@@ -116,24 +120,28 @@ export default function SandwichOrderForm(){
             <div className={cheeseType === "none" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
                 setCheeseType("none")
+                updateSandwich({ sandwichType, cheeseType: "none", spice, toppings })
             }}>
                 <span>None</span>
             </div>
             <div className={cheeseType === "cheddar" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
                 setCheeseType("cheddar")
+                updateSandwich({ sandwichType, cheeseType: "cheddar", spice, toppings })
             }}>
                 <span>Cheddar</span>
             </div>
             <div className={cheeseType === "mozzarella" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
                 setCheeseType("mozzarella")
+                updateSandwich({ sandwichType, cheeseType: "mozzarella", spice, toppings })
             }}>
                 <span>Mozzarella</span>
             </div>
             <div className={cheeseType === "feta" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
                 setCheeseType("feta")
+                updateSandwich({ sandwichType, cheeseType: "feta", spice, toppings })
             }}>
                 <span>Feta</span>
             </div>
@@ -143,25 +151,30 @@ export default function SandwichOrderForm(){
         <div style={{ display: "inline-block" }}>
             <div className={spice === "none" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
-                setSpice("none")
+                setSpice("none", console.log(spice))
+                updateSandwich({ sandwichType, cheeseType, spice: "none", toppings })
             }}>
                 <span>None</span>
             </div>
             <div className={spice === "little" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
-                setSpice("little")
+                setSpice("little", console.log(spice))
+                updateSandwich({ sandwichType, cheeseType, spice: "little", toppings })
             }}>
                 <span>🌶️</span>
             </div>
             <div className={spice === "medium" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
-                setSpice("medium")
+                setSpice("medium", console.log(spice))
+                updateSandwich({ sandwichType, cheeseType, spice: "medium", toppings })
+
             }}>
                 <span>🌶️🌶️</span>
             </div>
             <div className={spice === "hot" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
-                setSpice("hot")
+                setSpice("hot", console.log(spice))
+                updateSandwich({ sandwichType, cheeseType, spice: "hot", toppings })
             }}>
                 <span>🌶️🌶️🌶️</span>
             </div>
@@ -171,21 +184,25 @@ export default function SandwichOrderForm(){
         <div style={{ display: "inline-block" }}>
             <div className={toppings.includes("lettuce") ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 toggleVeggie("lettuce")
+                updateSandwich({ sandwichType, cheeseType, spice, toppings: toppings.includes("lettuce") ? toppings.filter(topping => topping !== "lettuce") : toppings.concat(["lettuce"]) })
             }}>
                 <span>Lettuce</span>
             </div>
-            <div className={toppings.includes("tomato") ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => 
+            <div className={toppings.includes("tomato") ? "sandwichOptionSelected" :"sandwichOption"} onClick={() =>{ 
                 toggleVeggie("tomato")
-            }>
+                updateSandwich({ sandwichType, cheeseType, spice, toppings: toppings.includes("tomato") ? toppings.filter(topping => topping !== "tomato") : toppings.concat(["tomato"]) })
+            }}>
                 <span>Tomato</span>
             </div>
             <div className={toppings.includes("cucumber") ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 toggleVeggie("cucumber")
+                updateSandwich({ sandwichType, cheeseType, spice, toppings: toppings.includes("cucumber") ? toppings.filter(topping => topping !== "cucumber") : toppings.concat(["cucumber"]) })
             }}>
                 <span>Cucumber</span>
             </div>
             <div className={toppings.includes("onion") ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 toggleVeggie("onion")
+                updateSandwich({ sandwichType, cheeseType, spice, toppings: toppings.includes("onion") ? toppings.filter(topping => topping !== "onion") : toppings.concat(["onion"]) })                
             }}>
                 <span>Onion</span>
             </div>
@@ -234,10 +251,10 @@ export default function SandwichOrderForm(){
         </div>
     )
     const level2Panels = [
-        { key: 'panel-2a', title: `Sandwich Type: ${sandwichType}`, content: {content: sandwichTypeContent} },
-        { key: 'panel-2b', title: `Cheese Type: ${cheeseType}`, content: {content: cheeseTypeContent} },
-        { key: 'panel-2c', title: `Spice Level: ${spice}`, content: {content: spiceTypeContent} },
-        { key: 'panel-2d', title: `Veggies: ${toppings.map(topping => " " + topping)}`, content: {content: veggiesTypeContent} }
+        { key: 'panel-2a', title: `Sandwich Type ${sandwichType !== "" ? "✓": ""}: ${sandwichType}`, content: {content: sandwichTypeContent} },
+        { key: 'panel-2b', title: `Cheese Type ${cheeseType !== "" ? "✓": ""}: ${cheeseType}`, content: {content: cheeseTypeContent} },
+        { key: 'panel-2c', title: `Spice Level ${spice !== "" ? "✓": ""}: ${spice}`, content: {content: spiceTypeContent} },
+        { key: 'panel-2d', title: `Veggies ✓: ${toppings.map(topping => " " + topping)}`, content: {content: veggiesTypeContent} }
     ]
     const Level2Content = (
         <div>
