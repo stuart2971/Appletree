@@ -100,6 +100,8 @@ export default function FriesOrderForm(){
         <div>
         <div style={{verticalAlign: "middle", display: "inline-block"}}>
             <p style={{float: "left", display: "inline-block"}}>I want my order to be </p>
+            <div style={{float: "right", marginTop: "-15px"}}>
+
                 <div className={!isTakeout ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                     setIsTakeout(false);
                     setValidTakeout(true);
@@ -112,10 +114,10 @@ export default function FriesOrderForm(){
                 }}>
                     <span>Delivery</span>
                 </div>
-                
+            </div>
             </div>
             {isTakeout ? 
-                <div>
+                <form autofill="off">
                 <Input className="margin10" fluid placeholder="Address" onChange={e => {
                     setAddress(noSpace(e.target.value))
                     setValidTakeout(isValidTakeout())
@@ -123,7 +125,7 @@ export default function FriesOrderForm(){
                 <Input className="margin10" fluid placeholder="Phone Number" icon="phone" onChange={e => {
                     setPhoneNumber(noSpace(e.target.value))
                     setValidTakeout(isValidTakeout())
-                }} /></div>: 
+                }} /></form>: 
                 <div></div>
             }
             <NextPrevButtons canProceed={!isTakeout || (isTakeout && validTakeout)} top="10px" step={onStep} next={() => NextStep([phoneNumber, address], false)} prev={() => PrevStep()} />

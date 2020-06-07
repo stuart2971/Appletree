@@ -11,13 +11,18 @@ import SandwichAnimation from "./vendors/SandwichAnimation.component"
 export default function OrderForm(){
     const [orderType, setOrderType] = useState("Sandwich")
     const [sandwich, setSandwich] = useState({toppings: [], spice: ""})
+    const [width, setWidth] = React.useState(window.innerWidth);
+    const breakpoint = 992;
+    React.useEffect(() => {
+        window.addEventListener("resize", () => setWidth(window.innerWidth));
+      }, []);
     return(
         <section className="bg-lightGray section-padding">
             <div id="OrderForm"></div>
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-md-6 col-xl-5 mb-4 mb-md-0">
-                        <SandwichAnimation sandwich={sandwich} />
+                        {width > breakpoint ? <SandwichAnimation sandwich={sandwich} />: <div></div>}
                     </div>
                     <div className="col-md-6 offset-xl-2 col-xl-5">
                         <div className="search-wrapper">

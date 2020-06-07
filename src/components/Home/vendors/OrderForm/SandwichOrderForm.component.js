@@ -21,7 +21,7 @@ export default function SandwichOrderForm({updateSandwich}){
     const [price, setPrice] = useState("0.00")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [address, setAddress] = useState("")
-    const [onStep, setOnStep] = useState(2)
+    const [onStep, setOnStep] = useState(0)
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [orderSuccessful, setOrderSuccessful] = useState(false);
     const [isTakeout, setIsTakeout] = useState(false)
@@ -220,7 +220,8 @@ export default function SandwichOrderForm({updateSandwich}){
     const Level1Content = (
         <div>
         <div style={{verticalAlign: "middle", display: "inline-block"}}>
-            <p style={{float: "left", display: "inline-block"}}>I want my order to be </p>
+            <span style={{float: "left"}}>I want my order to be </span>
+            <div style={{float: "right", marginTop: "-15px"}}>
                 <div className={!isTakeout ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                     setIsTakeout(false);
                     setValidTakeout(true);
@@ -233,10 +234,11 @@ export default function SandwichOrderForm({updateSandwich}){
                 }}>
                     <span>Delivery</span>
                 </div>
-                
+            </div> 
             </div>
+            
             {isTakeout ? 
-                <div>
+                <form autofill="off">
                 <Input className="margin10" fluid placeholder="Address" onChange={e => {
                     setAddress(noSpace(e.target.value))
                     setValidTakeout(isValidTakeout())
@@ -244,7 +246,7 @@ export default function SandwichOrderForm({updateSandwich}){
                 <Input className="margin10" fluid placeholder="Phone Number" icon="phone" onChange={e => {
                     setPhoneNumber(noSpace(e.target.value))
                     setValidTakeout(isValidTakeout())
-                }} /></div>: 
+                }} /></form>: 
                 <div></div>
             }
             <NextPrevButtons canProceed={!isTakeout || (isTakeout && validTakeout)} top="10px" step={onStep} next={() => NextStep([phoneNumber, address], false)} prev={() => PrevStep()} />
