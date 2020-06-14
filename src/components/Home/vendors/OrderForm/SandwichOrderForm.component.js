@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import { Header, Input, Loader, Accordion } from 'semantic-ui-react'
+import { Input, Accordion, Message } from 'semantic-ui-react'
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
@@ -9,7 +9,7 @@ import { insertSandwich } from "./ProcessOrder";
 import NextPrevButtons from "./vendors/NextPrevButtons.component";
 import CheckoutForm from "./vendors/CheckoutForm.component"
 
-const promise = loadStripe("pk_live_jJHt0rweBXTMfZRtpLqaB9PO");
+const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
 
 
 export default function SandwichOrderForm({updateSandwich}){
@@ -22,10 +22,9 @@ export default function SandwichOrderForm({updateSandwich}){
     const [phoneNumber, setPhoneNumber] = useState("")
     const [address, setAddress] = useState("")
     const [onStep, setOnStep] = useState(0)
-    const [orderPlaced, setOrderPlaced] = useState(false);
-    const [orderSuccessful, setOrderSuccessful] = useState(false);
     const [isTakeout, setIsTakeout] = useState(false)
     const [validTakeout, setValidTakeout] = useState(false)
+    const [orderSuccessful, setOrderSuccessful] = useState(false)
     
     const assembleSandwich = () => {
         let sandwich = {
@@ -40,12 +39,12 @@ export default function SandwichOrderForm({updateSandwich}){
             takeout: isTakeout
         }
         if(!sandwich.takeout){
+            let OrderNumber =  Math.floor(Math.random() * 10000).toString()
             sandwich.address = "Dine in.  Order #"; 
-            sandwich.phoneNumber = Math.floor(Math.random() * 10000).toString()
+            sandwich.phoneNumber = OrderNumber
+            setPhoneNumber(OrderNumber)
         }
-        setOrderPlaced(true)
         insertSandwich(sandwich, (res) => {
-            console.log(res)
             if(res.status == 200)
                 setOrderSuccessful(true)
         });
@@ -273,12 +272,24 @@ export default function SandwichOrderForm({updateSandwich}){
             <NextPrevButtons canProceed={sandwichType !== "" & cheeseType !== "" & spice !== ""} step={onStep} top="10px" next={() => NextStep([sandwichType, cheeseType, spice], true)} prev={() => PrevStep()} />
         </div>
     )
-    
+    const redirect = () => {
+        let path = window.location.href
+        window.location = path.substring(0, path.lastIndexOf("/")) + "/ShowOrders/" + phoneNumber
+    }
+    //REMEMBER TO KEEP PRICE IN CHECKOUTFORM COMPONENT AT: parseFloat(price) * 100.  
     const Level4Content = (
         <div>
+            <h2>Cost: ${price}</h2>
             <Elements stripe={promise}>
-                {onStep === 3 ? <CheckoutForm price={100} onComplete={assembleSandwich}/> : <div></div>}
+                {onStep === 3 ? <CheckoutForm price={parseFloat(price) * 100} onComplete={assembleSandwich}/> : <div></div>}
             </Elements>
+            {orderSuccessful ? 
+                <Message positive onClick={redirect}>
+                    <Message.Header>Order Placed!</Message.Header>
+                    <p>Click here to go <b>see your order</b></p>
+                </Message>:
+                <div></div>
+            }
             <NextPrevButtons canProceed={false} top="10px" step={onStep} next={assembleSandwich} prev={() => PrevStep()} />
         </div>
     )
@@ -286,19 +297,11 @@ export default function SandwichOrderForm({updateSandwich}){
         { key: 'panel-1', title: `Step 1: Pickup or Delivery ${onStep > 0 ? "✓": ""}: ${isTakeout ? "Delivery" : "Pickup"}`, content: { content: Level1Content } },
         { key: 'panel-2', title: `Step 2: Name for the Order ${onStep > 1 ? "✓": ""}: ${name}`, content: { content: Level2Content } },
         { key: 'panel-3', title: `Step 3: Build your Sandwich ${onStep > 2 ? "✓": ""}: ${sandwichType}`, content: { content: Level3Content } },
-        { key: 'panel-4', title: 'Step 4: Choose Payment Method', content: { content: Level4Content } },
-    ]
-    const loadingMessages = [
-        "Assembling Sandwich...",
-        "Purchasing Ingredients...",
-        "Herding Cattle...",
-        "Feeding Chickens...",
-        "Shaping Falafel"
+        { key: 'panel-4', title: `Step 4: Choose Payment Method: $${price}`, content: { content: Level4Content } },
     ]
     return(
         <div>
             <Accordion activeIndex={onStep} panels={rootPanels} styled />
-            <Header as='h3'>Price: ${price}</Header>
             <div id="order_button" className="form-group form-group-position">
             </div>
         </div>

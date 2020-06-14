@@ -1,17 +1,15 @@
 import React, {useState} from "react"
 import { Header, Input, Loader, Accordion } from 'semantic-ui-react'
-import { NeuInput } from 'neumorphic-ui';
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
-// import { loadStripe } from "@stripe/stripe-js";
-// import { Elements } from "@stripe/react-stripe-js";
+import "./OrderForm.css"
 
 import { insertFries } from "./ProcessOrder";
 import NextPrevButtons from "./vendors/NextPrevButtons.component";
-import "./OrderForm.css"
-import SandwichOrderForm from "./SandwichOrderForm.component";
-// import CheckoutForm from "./PaymentSection.component"
+import CheckoutForm from "./vendors/CheckoutForm.component"
 
-// const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
+const promise = loadStripe("pk_live_jJHt0rweBXTMfZRtpLqaB9PO");
 
 export default function FriesOrderForm(){
     const [name, setName] = useState("")
@@ -21,11 +19,9 @@ export default function FriesOrderForm(){
     const [phoneNumber, setPhoneNumber] = useState("")
     const [address, setAddress] = useState("")
     const [onStep, setOnStep] = useState(0)
-    const [orderPlaced, setOrderPlaced] = useState(false);
-    const [orderSuccessful, setOrderSuccessful] = useState(false);
     const [isTakeout, setIsTakeout] = useState(false)
     const [validTakeout, setValidTakeout] = useState(false) 
-    const assembleSandwich = () => {
+    const assembleFries = () => {
         let fries = {
             name,
             friesType,
@@ -39,11 +35,9 @@ export default function FriesOrderForm(){
             fries.address = "Dine in.  Order #"; 
             fries.phoneNumber = Math.floor(Math.random() * 1000).toString()
         }
-        setOrderPlaced(true)
         insertFries(fries, (res) => {
-            console.log(res)
             if(res.status == 200)
-                setOrderSuccessful(true)
+                console.log("CREATE BANNER TO SEE ORDER")
         });
     }   
     const NextStep = (inputs, isRequired) => {
@@ -188,9 +182,10 @@ export default function FriesOrderForm(){
     
     const Level4Content = (
         <div>
-            Apple Payment<br />
-            Google Payment<br />
-            Credit Payment
+            <h2>Cost: ${price}</h2>
+            <Elements stripe={promise}>
+                {onStep === 3 ? <CheckoutForm price={parseFloat(price) * 100} onComplete={assembleFries}/> : <div></div>}
+            </Elements>
             <NextPrevButtons canProceed={false} top="10px" step={onStep} next={() => NextStep([name], true)} prev={() => PrevStep()} />
         </div>
     )
@@ -198,23 +193,11 @@ export default function FriesOrderForm(){
         { key: 'panel-1', title: `Step 1: Pickup or Delivery ${onStep > 0 ? "✓": ""}: ${isTakeout ? "Delivery" : "Pickup"}`, content: { content: Level1Content } },
         { key: 'panel-2', title: `Step 2: Name for the Order ${onStep > 1 ? "✓": ""}: ${name}`, content: { content: Level2Content } },
         { key: 'panel-3', title: `Step 3: Select Fries Type ${onStep > 2 ? "✓": ""}: ${friesType}`, content: { content: Level3Content } },
-        { key: 'panel-4', title: 'Step 4: Choose Payment Method', content: { content: Level4Content } },
-    ]
-    const loadingMessages = [
-        "Cutting Potatos...",
-        "Deep Frying Fries...",
-        "Salting Fries..."
+        { key: 'panel-4', title: `Step 4: Choose Payment Method: $${price}`, content: { content: Level4Content } },
     ]
     return(
         <div>
             <Accordion activeIndex={onStep} panels={rootPanels} styled />
-            <Header as='h3'>Price: ${price}</Header>
-            <div id="order_button" className="form-group form-group-position">
-                {!orderSuccessful & orderPlaced ? 
-                    <Loader active style={{color: "black"}}>{loadingMessages[Math.floor(Math.random() * loadingMessages.length)]}</Loader> : 
-                    <button onClick={assembleSandwich} type="submit" className="NextPrevButton black NextPrevButton--quidel NextPrevButton--inverted nextStep" style={{opacity: "1", cursor: "pointer"}}>Order Now</button>
-                }
-            </div>
         </div>
     )
 }

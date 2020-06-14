@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card, Image, Icon } from 'semantic-ui-react'
+import { Button, Card, Image, Icon, Label } from 'semantic-ui-react'
 import axios from "axios";
 
 export default class AdminFriesCard extends React.Component{
@@ -43,7 +43,8 @@ export default class AdminFriesCard extends React.Component{
         <Card>
           <Card.Content>
             <Image floated='right' size='mini' src={"/images/Orders/ProfileImages/" + this.props.imgFile} />
-            <Card.Header>{order.name}{order.isCompleted ? <Icon name="check circle" />: <div></div>}</Card.Header>
+            <Card.Header style={{ display: "inline-block" }}>{order.name}{order.isCompleted ? <Icon name="check circle" />: <div></div>}</Card.Header>
+            {order.takeout ? <Label color="red" horizontal>TAKEOUT</Label>: <div></div>}
             <Card.Meta> {personContact}<br /> Queue: {this.props.queue}</Card.Meta>
             <Card.Description>
             <hr />

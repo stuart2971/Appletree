@@ -15,8 +15,6 @@ export default function CheckoutForm({ price, onComplete }) {
   const stripe = useStripe();
   const elements = useElements();
   useEffect(() => {
-    console.log(price)
-    // Error!!!!  The price is 0 since it gets price as soon as component renders.  must fix
     window
       .fetch("https://appletree-express-server.herokuapp.com/payment", {
         method: "POST",
@@ -29,7 +27,6 @@ export default function CheckoutForm({ price, onComplete }) {
         return res.json();
       })
       .then(data => {
-        console.log(data.clientSecret)
         setClientSecret(data.clientSecret);
       });
   }, []);
@@ -51,8 +48,6 @@ export default function CheckoutForm({ price, onComplete }) {
     }
   };
   const handleChange = async (event) => {
-    // Listen for changes in the CardElement
-    // and display any errors as the customer types their card details
     setDisabled(event.empty);
     setError(event.error ? event.error.message : "");
   };
@@ -80,7 +75,7 @@ export default function CheckoutForm({ price, onComplete }) {
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
-      <button
+      <button className="pay_button"
         disabled={processing || disabled || succeeded}
         id="submit"
       >
