@@ -10,7 +10,7 @@ export default class AdminPage extends React.Component{
     }
     SortCompletedOrders(){
         return this.props.completedOrders.map((order, index) =>{ 
-            if(order.sandwichType == undefined){
+            if(order.sandwichType === undefined){
                 return (
                     <Grid.Column>
                         <AdminFriesCard 

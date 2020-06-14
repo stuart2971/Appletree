@@ -1,16 +1,16 @@
 import React, {useState} from "react"
 import { Header, Input, Loader, Accordion } from 'semantic-ui-react'
-import { NeuInput } from 'neumorphic-ui';
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
-// import { loadStripe } from "@stripe/stripe-js";
-// import { Elements } from "@stripe/react-stripe-js";
+import "./OrderForm.css"
 
 import { insertSandwich } from "./ProcessOrder";
 import NextPrevButtons from "./vendors/NextPrevButtons.component";
-import "./OrderForm.css"
-// import CheckoutForm from "./PaymentSection.component"
+import CheckoutForm from "./vendors/CheckoutForm.component"
 
-// const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
+const promise = loadStripe("pk_live_jJHt0rweBXTMfZRtpLqaB9PO");
+
 
 export default function SandwichOrderForm({updateSandwich}){
     const [name, setName] = useState("")
@@ -41,7 +41,7 @@ export default function SandwichOrderForm({updateSandwich}){
         }
         if(!sandwich.takeout){
             sandwich.address = "Dine in.  Order #"; 
-            sandwich.phoneNumber = Math.floor(Math.random() * 1000).toString()
+            sandwich.phoneNumber = Math.floor(Math.random() * 10000).toString()
         }
         setOrderPlaced(true)
         insertSandwich(sandwich, (res) => {
@@ -151,21 +151,21 @@ export default function SandwichOrderForm({updateSandwich}){
         <div style={{ display: "inline-block" }}>
             <div className={spice === "none" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
-                setSpice("none", console.log(spice))
+                setSpice("none")
                 updateSandwich({ sandwichType, cheeseType, spice: "none", toppings })
             }}>
                 <span>None</span>
             </div>
             <div className={spice === "little" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
-                setSpice("little", console.log(spice))
+                setSpice("little")
                 updateSandwich({ sandwichType, cheeseType, spice: "little", toppings })
             }}>
                 <span>🌶️</span>
             </div>
             <div className={spice === "medium" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                 setOption(option + 1)
-                setSpice("medium", console.log(spice))
+                setSpice("medium")
                 updateSandwich({ sandwichType, cheeseType, spice: "medium", toppings })
 
             }}>
@@ -276,10 +276,10 @@ export default function SandwichOrderForm({updateSandwich}){
     
     const Level4Content = (
         <div>
-            Apple Payment<br />
-            Google Payment<br />
-            Credit Payment
-            <NextPrevButtons canProceed={false} top="10px" step={onStep} next={() => NextStep([name], true)} prev={() => PrevStep()} />
+            <Elements stripe={promise}>
+                {onStep === 3 ? <CheckoutForm price={100} onComplete={assembleSandwich}/> : <div></div>}
+            </Elements>
+            <NextPrevButtons canProceed={false} top="10px" step={onStep} next={assembleSandwich} prev={() => PrevStep()} />
         </div>
     )
     const rootPanels = [
@@ -300,10 +300,6 @@ export default function SandwichOrderForm({updateSandwich}){
             <Accordion activeIndex={onStep} panels={rootPanels} styled />
             <Header as='h3'>Price: ${price}</Header>
             <div id="order_button" className="form-group form-group-position">
-                {!orderSuccessful & orderPlaced ? 
-                    <Loader active style={{color: "black"}}>{loadingMessages[Math.floor(Math.random() * loadingMessages.length)]}</Loader> : 
-                    <button onClick={assembleSandwich} type="submit" className="NextPrevButton black NextPrevButton--quidel NextPrevButton--inverted nextStep" style={{opacity: "1", cursor: "pointer"}}>Order Now</button>
-                }
             </div>
         </div>
     )

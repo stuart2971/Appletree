@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Segment } from 'semantic-ui-react'
-
+import React, { useState, useEffect, useCallback } from "react";
 import {
   CardElement,
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
-import axios from "axios";
+import "./Checkout.css"
 
-
-export default function CheckoutForm() {
+export default function CheckoutForm({ price, onComplete }) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
@@ -18,14 +15,24 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   useEffect(() => {
-    axios.post('https://appletree-express-server.herokuapp.com/sandwich/add', JSON.stringify({a: 1}))
-      .then( (response, err) =>{
-        console.log(response);
-        return response.json()
+    console.log(price)
+    // Error!!!!  The price is 0 since it gets price as soon as component renders.  must fix
+    window
+      .fetch("https://appletree-express-server.herokuapp.com/payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ price })
+      })
+      .then(res => {
+        return res.json();
       })
       .then(data => {
+        console.log(data.clientSecret)
         setClientSecret(data.clientSecret);
       });
+  }, []);
   const cardStyle = {
     style: {
       base: {
@@ -44,11 +51,12 @@ export default function CheckoutForm() {
     }
   };
   const handleChange = async (event) => {
+    // Listen for changes in the CardElement
+    // and display any errors as the customer types their card details
     setDisabled(event.empty);
     setError(event.error ? event.error.message : "");
   };
   const handleSubmit = async ev => {
-    console.log("pressed")
     ev.preventDefault();
     setProcessing(true);
     const payload = await stripe.confirmCardPayment(clientSecret, {
@@ -63,37 +71,27 @@ export default function CheckoutForm() {
       setError(`Payment failed ${payload.error.message}`);
       setProcessing(false);
     } else {
-      console.log("order successful")
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+      onComplete();
     }
   };
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
-      <Segment>
-        <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
-      </Segment>
-      <div id="order_button" className="form-group form-group-position">
-      
+      <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
       <button
-        className="button border-0"
         disabled={processing || disabled || succeeded}
         id="submit"
       >
         <span id="button-text">
           {processing ? (
             <div className="spinner" id="spinner"></div>
-          ) : "Pay"}
+          ) : (
+            "Pay"
+          )}
         </span>
       </button>
-      </div>
-      {/* Show any error that happens when processing the payment */}
-      {error && (
-        <div className="card-error" role="alert">
-          {error}
-        </div>
-      )}
     </form>
   );
 }

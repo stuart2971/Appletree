@@ -7,11 +7,11 @@ export default function NextPrevButtons({next, prev, step, top, canProceed}){
         next = null;
         
     const NextButton = 
-        <button class={`NextPrevButton green NextPrevButton--quidel NextPrevButton--inverted nextStep ${canProceed ? "Next--quidel Next--inverted": ""}`} onClick={next}>
+        <button className={`NextPrevButton green NextPrevButton--quidel NextPrevButton--inverted nextStep ${canProceed ? "Next--quidel Next--inverted": ""}`} onClick={next}>
             <span>Continue</span>
         </button> 
     const PrevButton = 
-        <button class="NextPrevButton red NextPrevButton--quidel Prev--quidel NextPrevButton--inverted Prev--inverted prevStep" onClick={prev}>
+        <button className="NextPrevButton red NextPrevButton--quidel Prev--quidel NextPrevButton--inverted Prev--inverted prevStep" onClick={prev}>
             <span>Go Back</span>
         </button>
     return (

@@ -1,7 +1,6 @@
 import axios from "axios";
 
 function insertSandwich(order, callback){
-  console.log(order)
     axios.post('https://appletree-express-server.herokuapp.com/sandwich/add', order)
       .then( (response, err) =>{
         callback(response)

@@ -38,7 +38,7 @@ export default class OrderRouter extends React.Component{
         let orderArr = {}
         let sandwiches = this.state.sandwiches
         for(let i = 0; i < sandwiches.length; i++){
-            if(sandwiches[i]._id == id) {
+            if(sandwiches[i]._id === id) {
                 orderArr.arrName = "sandwiches";
                 orderArr.arr = sandwiches;
                 orderArr.index = i;                
@@ -47,7 +47,7 @@ export default class OrderRouter extends React.Component{
         }
         let fries = this.state.fries
         for(let i = 0; i < fries.length; i++){
-            if(fries[i]._id == id) {
+            if(fries[i]._id === id) {
                 orderArr.arrName = "fries";
                 orderArr.arr = fries;
                 orderArr.index = i;                
@@ -55,7 +55,7 @@ export default class OrderRouter extends React.Component{
             }
         }
         for(let i = 0; i < this.state.completedOrders.length; i++){
-            if(this.state.completedOrders[i]._id == id) {
+            if(this.state.completedOrders[i]._id === id) {
                 orderArr.arrName = "completedOrders";
                 orderArr.arr = this.state.completedOrders;
                 orderArr.index = i;                
