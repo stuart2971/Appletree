@@ -8,10 +8,9 @@ import "./styles/vendors/owl.theme.default.min.css";
 import "./styles/vendors/themify-icons.css";
 import "./styles/scss/style.scss";
 
-import OrderForm from "./vendors/OrderForm/OrderForm.component";
+import OrderFormContainer from "./vendors/OrderForm/OrderFormContainer.component";
 import CardGrid from "./vendors/FoodItemCards/CardGrid.component";
 import MenuTabular from "./vendors/MenuItem/MenuTabular.component";
-import ChefCardGrid from "./vendors/ChefCards/ChefCardGrid.component";
 
 export default class Home extends React.Component {
     render() {
@@ -111,18 +110,8 @@ export default class Home extends React.Component {
                         <a className="button" href="#OrderForm">Order Now</a>
                     </div>
                 </section>
-                <section className="section-margin">
-                    <div className="container">
-                        <div className="section-intro mb-75px">
-                            <h4 className="intro-title">Our Chef</h4>
-                            <h2>Talent & experience member</h2>
-                        </div>
- 
-                        <ChefCardGrid />
-                    </div>
-                </section>
                 
-                <OrderForm />
+                <OrderFormContainer />
             </div>
             
         )

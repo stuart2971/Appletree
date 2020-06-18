@@ -21,6 +21,9 @@ export default class AdminFriesCard extends React.Component{
           console.log(err)
       })
   }
+  capitalize(word) { 
+    if(word) return word[0].toUpperCase() + word.slice(1); 
+  }
   render(){
     let order = this.props.order;
     let adminButtons, completeButton;
@@ -49,6 +52,7 @@ export default class AdminFriesCard extends React.Component{
             <Card.Description>
             <hr />
               <b>{order.friesType == "spicy"? `${order.spice} spicy`: order.friesType} fries</b>
+              <b>{order.friesType == "belgian"? `Belgian Fries (${this.capitalize(order.mayoType)} Mayo)`: order.friesType + " Fries"}</b>
               <br />
               ${order.price}
             </Card.Description>

@@ -193,3 +193,37 @@
     margin: 10px;
     border: none;
 }
+.receipt{
+    float: right;
+    border: 1px solid black;
+    width: 30%;
+    height: 100%;
+}
+.OrderForm{
+    width: 45%;
+    float:right;
+}
+@media only screen and (max-width: 768px) {
+    .OrderForm{
+        width: 100%;
+    }
+    .receipt{
+        margin-top: 2em;
+    }
+}
+.addItemOption{
+    cursor: pointer;
+    float: right;
+    border: 1px solid blue;
+    padding: 5px;
+    border-radius: 5px;
+    color: blue;
+    width: 100%;
+    text-align: center;
+    margin: 10px 70px 10px 70px
+
+}
+.itemOptions{
+    width: 100%;
+    min-height: 100px;
+}
