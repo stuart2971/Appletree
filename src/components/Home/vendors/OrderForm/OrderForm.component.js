@@ -16,12 +16,11 @@ import FriesCheckout from "./vendors/FriesCheckout.component";
 const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
 
 export default function OrderForm({updateSandwich}){
-    const [name, setName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [address, setAddress] = useState("")
     const [isTakeout, setIsTakeout] = useState(false)
     const [price, setPrice] = useState("0.00")
-    const [items, setItems] = useState([{toppings: []}])
+    const [items, setItems] = useState([{name: "", toppings: []}])
     
     const [itemBlank, setItemBlank] = useState(0)
     const [orderSuccessful, setOrderSuccessful] = useState(false)
@@ -30,7 +29,6 @@ export default function OrderForm({updateSandwich}){
 
     const postOrders = () => {
         let orderInfo = {
-            name,
             phoneNumber,
             address,
             takeout: isTakeout
@@ -42,7 +40,6 @@ export default function OrderForm({updateSandwich}){
             setPhoneNumber(OrderNumber)
         }
         for(let i = 0; i < items.length; i++){
-            orderInfo.name = `${name} #${i + 1}`
             let completeOrder = {...items[i], ...orderInfo}
             if(items[i].sandwichType !== undefined){
                 insertSandwich(completeOrder, (res) => {
@@ -51,7 +48,6 @@ export default function OrderForm({updateSandwich}){
                 });
             }
             if(items[i].friesType !== undefined){
-                console.log(items[i])
                 insertFries(completeOrder, (res) => {
                     if(res.status == 200)
                         setOrderSuccessful(true)
@@ -109,6 +105,10 @@ export default function OrderForm({updateSandwich}){
         console.log(items)
         for(let i = 0; i < items.length; i++){
             let item = items[i];
+            if(noSpace(item.name) === ""){
+                setItemBlank(i)
+                return;
+            }
             if(item.orderType === "sandwich"){
                 if(item.sandwichType === "" ||
                     item.cheeseType === "" ||
@@ -117,7 +117,6 @@ export default function OrderForm({updateSandwich}){
                     return;
                 }
             }
-            console.log(item)
             if(item.orderType === "fries"){
                 if(item.friesType === "" ||
                 (item.friesType === "spicy" && item.spice === "") ||
@@ -162,8 +161,8 @@ export default function OrderForm({updateSandwich}){
             {isTakeout ? 
                 <form autofill="off">
                     <Input className="margin10" fluid placeholder="Address" onChange={e => {
-                        setAddress(noSpace(e.target.value))
-                        setValidTakeout(isValidTakeout())
+                        setAddress(noSpace(e.target.value));
+                        setValidTakeout(isValidTakeout());
                     }} />
                     <Input className="margin10" fluid placeholder="Phone Number" icon="phone" onChange={e => {
                         setPhoneNumber(noSpace(e.target.value))
@@ -175,18 +174,7 @@ export default function OrderForm({updateSandwich}){
             <NextPrevButtons canProceed={!isTakeout || (isTakeout && validTakeout)} top="10px" step={onStep} next={() => NextStep([phoneNumber, address], false)} prev={() => PrevStep()} />
         </div>
     )
-    
     const Level2Content = (
-        <div>
-            <div className="form-group">
-                <form autofill="off">
-                    <Input fluid placeholder="Name" onChange={e => setName(e.target.value) } />
-                </form>
-                <NextPrevButtons canProceed={noSpace(name) !== ""} step={onStep} top="18px" next={() => NextStep([name], true)} prev={() => PrevStep()} />
-            </div>         
-        </div>
-    )
-    const Level3Content = (
         <div className="itemOptions">
             <Grid columns={1} centered>
                 <Grid.Row>
@@ -195,7 +183,7 @@ export default function OrderForm({updateSandwich}){
                     })}
                     
                     <div className="addItemOption" onClick={() => {
-                        setItems( items.concat([{toppings: []}]))
+                        setItems( items.concat([{name: "", toppings: []}]))
                         setItemBlank(items.length - 1)
                     }}>
                         <span>+ Add Item</span>
@@ -205,8 +193,8 @@ export default function OrderForm({updateSandwich}){
             </Grid>
         </div>
     )
-    
-    const Level4Content = (
+    //KEEP THE CONDITIONAL RENDERING FOR THE CARD PAYMENT.  IT ONLY GENERATES A KEY WHEN IT GETS TO STEP 3
+    const Level3Content = (
         <div>
             <h3>Your Items ({items.length})</h3>
             {items.map((item, index) => {
@@ -218,7 +206,7 @@ export default function OrderForm({updateSandwich}){
             })}
             <h2>Cost: ${calculatePrice()}</h2>
             <Elements stripe={promise}>
-                {onStep === 3 ? <CheckoutForm price={parseFloat(calculatePrice()) * 100} onComplete={postOrders}/> : <div></div>}
+                {onStep === 2 ? <CheckoutForm price={parseFloat(calculatePrice()) * 100} onComplete={postOrders}/> : <div></div>}
             </Elements>
             {orderSuccessful ? 
                 <Message positive onClick={redirect}>
@@ -232,10 +220,10 @@ export default function OrderForm({updateSandwich}){
     )
     const rootPanels = [
         { key: 'panel-1', title: `Step 1: Pickup or Delivery ${onStep > 0 ? "✓": ""}: ${isTakeout ? "Delivery" : "Pickup"}`, content: { content: Level1Content } },
-        { key: 'panel-2', title: `Step 2: Name for the Order ${onStep > 1 ? "✓": ""}: ${name}`, content: { content: Level2Content } },
-        { key: 'panel-3', title: `Step 3: Build your Sandwich ${onStep > 2 ? "✓": ""}`, content: { content: Level3Content } },
-        { key: 'panel-4', title: `Step 4: Enter Payment Details: $${price}`, content: { content: Level4Content } },
+        { key: 'panel-3', title: `Step 2: Build your Sandwich ${onStep > 2 ? "✓": ""}`, content: { content: Level2Content } },
+        { key: 'panel-4', title: `Step 3: Enter Payment Details: $${price}`, content: { content: Level3Content } },
     ]
+    console.log(items)
     return(
         <div className="OrderForm">
             <Accordion activeIndex={onStep} panels={rootPanels} styled />

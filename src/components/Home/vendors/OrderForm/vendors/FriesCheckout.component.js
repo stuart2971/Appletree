@@ -7,7 +7,7 @@ export default function FriesCheckout({ fries, itemNumber }){
     }
     return(
         <div style={{borderBottom: "1px solid rgba(0, 0, 0, 0.2)", padding: "15px"}}>
-            <h5>Item #{itemNumber + 1}: {fries.friesType === "regular" || fries.friesType === "spicy" || fries.friesType === "belgian" ? capitalize(fries.friesType) + " Fries" : capitalize(fries.friesType)}</h5>
+            <h5>{`${capitalize(fries.name)}'s ${fries.friesType === "regular" || fries.friesType === "spicy" || fries.friesType === "belgian" ? capitalize(fries.friesType) + " Fries" : capitalize(fries.friesType)}`}</h5>
             <div style={{opacity: "0.7"}}>
                 {fries.friesType === "spicy" ? <span>Spice: {capitalize(fries.spice)}</span> : <div></div>}
                 {fries.friesType === "belgian" ? <span>Mayo: {capitalize(fries.mayoType)}</span> : <div></div>}

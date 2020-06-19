@@ -7,7 +7,7 @@ export default function SandwichCheckout({ sandwich, itemNumber }){
     }
     return(
         <div style={{borderBottom: "1px solid rgba(0, 0, 0, 0.2)", padding: "15px"}}>
-            <h5>Item #{itemNumber + 1}: {capitalize(sandwich.sandwichType)} Sandwich</h5>
+            <h5>{`${capitalize(sandwich.name)}'s ${capitalize(sandwich.sandwichType)} Sandwich`}</h5>
             <div style={{opacity: "0.7"}}>
                 <span>Cheese: {capitalize(sandwich.cheeseType)}</span>
                 <br />

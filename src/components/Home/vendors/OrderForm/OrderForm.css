@@ -227,3 +227,10 @@
     width: 100%;
     min-height: 100px;
 }
+.NameInput{
+    border: none;
+    width: 50%;
+    height: 2em;
+    outline: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}

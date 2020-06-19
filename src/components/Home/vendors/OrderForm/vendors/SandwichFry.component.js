@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import { Accordion, Menu, Icon } from 'semantic-ui-react'
+import React, {useState} from "react";
+import { Accordion, Menu, Icon, Input } from 'semantic-ui-react'
 
 import "../OrderForm.css"
 
@@ -9,6 +9,7 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
     const [spice, setSpice] = useState("")
     const [price, setPrice] = useState("0.00")
     const [orderType, setOrderType] = useState("sandwich")
+    const [name, setName] = useState("")
     //Sandwich options
     const [sandwichType, setSandwichType] = useState("")
     const [cheeseType, setCheeseType] = useState("")
@@ -33,7 +34,7 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
     const changeOrderType = (orderType) => {
         setOrderType(orderType);
         resetStates()
-        updateItems(itemNumber, {toppings: []})
+        updateItems(itemNumber, {name: "", toppings: []})
         setOption(0);
     }
     const goToNextStep = () => {
@@ -42,29 +43,29 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
     const changeSandwichType = (sandwichType, price) => {
         setSandwichType(sandwichType)
         setPrice(price)
-        updateItems(itemNumber, {sandwichType, cheeseType, spice, toppings, price, orderType: "sandwich" })
+        updateItems(itemNumber, {name, sandwichType, cheeseType, spice, toppings, price, orderType: "sandwich" })
         goToNextStep()
     }
     const changeCheeseType = (cheeseType) => {
         setCheeseType(cheeseType)
-        updateItems(itemNumber, { sandwichType, cheeseType, spice, toppings, price, orderType: "sandwich" })
+        updateItems(itemNumber, {name, sandwichType, cheeseType, spice, toppings, price, orderType: "sandwich" })
         goToNextStep()
     }
     const changeSpice = (spice) => {
         setSpice(spice)
-        updateItems(itemNumber, { sandwichType, cheeseType, spice, toppings, price, orderType: "sandwich" })
+        updateItems(itemNumber, {name, sandwichType, cheeseType, spice, toppings, price, orderType: "sandwich" })
         goToNextStep()
     }
     const changeVeggie = (veggie) => {
         let newVeggies = toppings.includes(veggie) ? toppings.filter(topping => topping !== veggie) : toppings.concat([veggie])
         setToppings(newVeggies)
-        updateItems(itemNumber, { sandwichType, cheeseType, spice, toppings: newVeggies, price, orderType: "sandwich" })
+        updateItems(itemNumber, {name, sandwichType, cheeseType, spice, toppings: newVeggies, price, orderType: "sandwich" })
     }
     const changeFriesType = (friesType, spice, mayoType, price) => {
         setFriesType(friesType)
         setMayoType(mayoType)
         setPrice(price)
-        updateItems(itemNumber, { friesType, spice, mayoType, price, orderType: "fries" })
+        updateItems(itemNumber, {name, friesType, spice, mayoType, price, orderType: "fries" })
     }
 
     let panels = []
@@ -139,21 +140,22 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
     }else if(orderType === "fries"){
         const spiceTypeContent = (
             <div style={{ display: "inline-block" }}>
+                <hr />
                 <div className={spice === "little" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                     setSpice("little")
-                    updateItems(itemNumber, {friesType, spice: "little", mayoType: "none", price, orderType: "fries"})
+                    updateItems(itemNumber, {name, friesType, spice: "little", mayoType: "none", price, orderType: "fries"})
                 }}>
                     <span>🌶️</span>
                 </div>
                 <div className={spice === "medium" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                     setSpice("medium")
-                    updateItems(itemNumber, {friesType, spice: "medium", mayoType: "none", price, orderType: "fries"})
+                    updateItems(itemNumber, {name, friesType, spice: "medium", mayoType: "none", price, orderType: "fries"})
                 }}>
                     <span>🌶️🌶️</span>
                 </div>
                 <div className={spice === "hot" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                     setSpice("hot")
-                    updateItems(itemNumber, {friesType, spice: "hot", mayoType: "none", price, orderType: "fries"})
+                    updateItems(itemNumber, {name, friesType, spice: "hot", mayoType: "none", price, orderType: "fries"})
                 }}>
                     <span>🌶️🌶️🌶️</span>
                 </div>
@@ -161,15 +163,16 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
         )
         const mayoTypeContent = (
             <div style={{ display: "inline-block" }}>
+                <hr />
                 <div className={mayoType === "garlic" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                     setMayoType("garlic")
-                    updateItems(itemNumber, {friesType, spice: "none", mayoType: "garlic", price, orderType: "fries"})
+                    updateItems(itemNumber, {name, friesType, spice: "none", mayoType: "garlic", price, orderType: "fries"})
                 }}>
                     <span>Garlic Mayo</span>
                 </div>
                 <div className={mayoType === "spicy" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => {
                     setMayoType("spicy")
-                    updateItems(itemNumber, {friesType, spice: "none", mayoType: "spicy", price, orderType: "fries"})
+                    updateItems(itemNumber, {name, friesType, spice: "none", mayoType: "spicy", price, orderType: "fries"})
                 }}>
                     <span>Spicy Mayo</span>
                 </div>
@@ -211,12 +214,19 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
     }
     return (
         <div>
-            <h4 className="itemNumber" onClick={() => { removeItem(itemNumber) }}>Item Number {itemNumber + 1} </h4>
+            <form autofill="off">
+                <label onClick={() => { removeItem(itemNumber) }} style={{float: "left", marginTop: "3px"}}>This item belongs to </label>
+                <input className="NameInput" fluid placeholder="(Enter a Name Here)" onChange={e => {
+                    setName(e.target.value)
+                    updateItems(itemNumber, {name: e.target.value, sandwichType, cheeseType, spice, toppings, price, orderType})
+                } } />
+            </form>
             <Menu fluid width={2}>
                     <Menu.Item name='Sandwich' active={orderType === 'sandwich'} onClick={() => changeOrderType("sandwich")} />
                     <Menu.Item name='Fries' active={orderType === 'fry'} onClick={() => { changeOrderType("fries") }} />
             </Menu>
-            <Accordion.Accordion style={{width: "100%", float: "right", marginBottom: "20px"}} activeIndex={option} panels={panels} onTitleClick={handleTitleClick}/>
+            <Accordion.Accordion style={{width: "100%", float: "right", marginBottom: "20px", marginTop: "0px"}} activeIndex={option} panels={panels} onTitleClick={handleTitleClick}/>
         </div>
     )
 }
+// <h4 className="itemNumber" onClick={() => { removeItem(itemNumber) }}>Item Number {itemNumber + 1} <Icon name="delete" /></h4>
