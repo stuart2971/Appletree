@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Accordion, Menu, Icon, Input } from 'semantic-ui-react'
 
 import "../OrderForm.css"
@@ -17,6 +17,14 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
     //Fries option
     const [friesType, setFriesType] = useState("");
     const [mayoType, setMayoType] = useState("")
+
+    useEffect(() => {
+        setName(item.name)
+        setSandwichType(item.sandwichType)
+        setCheeseType(item.cheeseType)
+        setToppings(item.toppings)
+        setSpice(item.spice)
+    }, [item]);
 
     function capitalize(word) { 
         if(word) return word[0].toUpperCase() + word.slice(1); 
@@ -132,9 +140,9 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
             </div>
         )
         panels = [
-            { key: 'panel-2a', title: `Sandwich Type ${sandwichType !== "" ? "✓": ""}: ${sandwichType !== "" ? capitalize(sandwichType): "Not Chosen"}`, content: {content: sandwichTypeContent} },
-            { key: 'panel-2b', title: `Cheese Type ${cheeseType !== "" ? "✓": ""}: ${cheeseType !== "" ? capitalize(cheeseType): "Not Chosen"}`, content: {content: cheeseTypeContent} },
-            { key: 'panel-2c', title: `Spice Level ${spice !== "" ? "✓": ""}: ${spice !== "" ? capitalize(spice) : "Not Chosen"}`, content: {content: spiceTypeContent} },
+            { key: 'panel-2a', title: `Sandwich Type ${sandwichType !== "" ? "✓": ""}: ${sandwichType !== "" && sandwichType !== undefined ? capitalize(sandwichType): "Not Chosen"}`, content: {content: sandwichTypeContent} },
+            { key: 'panel-2b', title: `Cheese Type ${cheeseType !== "" ? "✓": ""}: ${cheeseType !== "" && cheeseType !== undefined? capitalize(cheeseType): "Not Chosen"}`, content: {content: cheeseTypeContent} },
+            { key: 'panel-2c', title: `Spice Level ${spice !== "" && spice !== undefined? "✓": ""}: ${spice !== "" && spice !== undefined ? capitalize(spice) : "Not Chosen"}`, content: {content: spiceTypeContent} },
             { key: 'panel-2d', title: `Veggies: ${toppings.length === 0 ? "None" : toppings.map(topping => " " + capitalize(topping))}`, content: {content: veggiesTypeContent} }
         ]
     }else if(orderType === "fries"){
@@ -217,7 +225,7 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
         <div style={{margin: "10px 50px 10px 50px", display: "block"}}>  
             <form autofill="off">
                 <label onClick={() => { removeItem(itemNumber) }} style={{float: "left", marginTop: "3px"}}><Icon name="delete" />This item belongs to </label>
-                <input className="NameInput" fluid placeholder="(Enter a Name)" onChange={e => {
+                <input className="NameInput" value={name} fluid placeholder="(Enter a Name)" onChange={e => {
                     setName(e.target.value)
                     updateItems(itemNumber, {name: e.target.value, sandwichType, cheeseType, spice, toppings, price, orderType})
                 } } />

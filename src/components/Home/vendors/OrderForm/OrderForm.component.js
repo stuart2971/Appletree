@@ -58,7 +58,6 @@ export default function OrderForm({updateSandwich}){
             }
         }
     }   
-    console.log(items)
     const NextStep = (inputs, isRequired) => {
         let canProceed = true;
         for(let i = 0; i < inputs.length; i++){
@@ -187,7 +186,6 @@ export default function OrderForm({updateSandwich}){
                             setItems( items.concat([{name: "", toppings: []}]))
                             setItemBlank(items.length - 1)
                         }}>
-                        
                             <span href="">+ Add Item</span>
                         </div>
                     </ScrollLink>
