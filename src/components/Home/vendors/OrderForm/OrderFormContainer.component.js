@@ -28,7 +28,7 @@ export default function OrderFormContainer(){
                         <p>Please fill out all the blanks. A phone number will be required in order to confirm your order once it has been made. </p> 
                     </div>
                 }
-                <OrderForm updateOrders={setSandwich} />         
+                <OrderForm updateSandwich={setSandwich} />         
             </div>
         </section>
     )

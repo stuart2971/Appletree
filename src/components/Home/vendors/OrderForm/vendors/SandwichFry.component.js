@@ -27,9 +27,9 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
         setCheeseType("")
         setToppings([])
         setFriesType("")
-        setSpice("")
+        setSpice("none")
         setPrice("")
-        setMayoType("")
+        setMayoType("none")
     }
     const changeOrderType = (orderType) => {
         setOrderType(orderType);
@@ -213,20 +213,22 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
         setOption(newIndex)
     }
     return (
-        <div>
+        
+        <div style={{margin: "10px 50px 10px 50px", display: "block"}}>  
             <form autofill="off">
-                <label onClick={() => { removeItem(itemNumber) }} style={{float: "left", marginTop: "3px"}}>This item belongs to </label>
-                <input className="NameInput" fluid placeholder="(Enter a Name Here)" onChange={e => {
+                <label onClick={() => { removeItem(itemNumber) }} style={{float: "left", marginTop: "3px"}}><Icon name="delete" />This item belongs to </label>
+                <input className="NameInput" fluid placeholder="(Enter a Name)" onChange={e => {
                     setName(e.target.value)
                     updateItems(itemNumber, {name: e.target.value, sandwichType, cheeseType, spice, toppings, price, orderType})
                 } } />
             </form>
-            <Menu fluid width={2}>
-                    <Menu.Item name='Sandwich' active={orderType === 'sandwich'} onClick={() => changeOrderType("sandwich")} />
-                    <Menu.Item name='Fries' active={orderType === 'fry'} onClick={() => { changeOrderType("fries") }} />
-            </Menu>
-            <Accordion.Accordion style={{width: "100%", float: "right", marginBottom: "20px", marginTop: "0px"}} activeIndex={option} panels={panels} onTitleClick={handleTitleClick}/>
+            <div style={name.split(" ").join("") === "" ? {opacity: "0.2", pointerEvents: "none"}: {opacity: "1"}}>
+                <Menu fluid width={2}>
+                        <Menu.Item name='Sandwich' active={orderType === 'sandwich'} onClick={() => changeOrderType("sandwich")} />
+                        <Menu.Item name='Fries' active={orderType === 'fry'} onClick={() => { changeOrderType("fries") }} />
+                </Menu>
+                <Accordion.Accordion style={{width: "100%", float: "right", marginBottom: "20px", marginTop: "0px"}} activeIndex={option} panels={panels} onTitleClick={handleTitleClick}/>
+            </div>
         </div>
     )
 }
-// <h4 className="itemNumber" onClick={() => { removeItem(itemNumber) }}>Item Number {itemNumber + 1} <Icon name="delete" /></h4>

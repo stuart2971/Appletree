@@ -2,6 +2,9 @@ import React, {useState} from "react"
 import { Input, Accordion, Message, Grid } from 'semantic-ui-react'
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import { Link as ScrollLink} from "react-scroll"
+import {Element as ScrollDestination} from "react-scroll"
+
 
 import "./OrderForm.css"
 
@@ -24,7 +27,7 @@ export default function OrderForm({updateSandwich}){
     
     const [itemBlank, setItemBlank] = useState(0)
     const [orderSuccessful, setOrderSuccessful] = useState(false)
-    const [onStep, setOnStep] = useState(0)
+    const [onStep, setOnStep] = useState(1)
     const [validTakeout, setValidTakeout] = useState(false)
 
     const postOrders = () => {
@@ -55,6 +58,7 @@ export default function OrderForm({updateSandwich}){
             }
         }
     }   
+    console.log(items)
     const NextStep = (inputs, isRequired) => {
         let canProceed = true;
         for(let i = 0; i < inputs.length; i++){
@@ -102,7 +106,6 @@ export default function OrderForm({updateSandwich}){
         return price.toFixed(2);
     }
     const areItemsCompleted = () => {
-        console.log(items)
         for(let i = 0; i < items.length; i++){
             let item = items[i];
             if(noSpace(item.name) === ""){
@@ -119,7 +122,7 @@ export default function OrderForm({updateSandwich}){
             }
             if(item.orderType === "fries"){
                 if(item.friesType === "" ||
-                (item.friesType === "spicy" && item.spice === "") ||
+                (item.friesType === "spicy" && item.spice === "none") ||
                 (item.friesType  === "belgian" && item.mayoType === "none")){
                     setItemBlank(i)
                     return;
@@ -133,9 +136,7 @@ export default function OrderForm({updateSandwich}){
         setItemBlank(-1)
     }
     const removeItem = (index) => {
-        let arr = items;
-        arr.splice(index, 1)
-        setItems(arr)
+        setItems(lastItems=>lastItems.filter((item, i) => i !== index))
         areItemsCompleted()
     }
     const Level1Content = (
@@ -181,14 +182,18 @@ export default function OrderForm({updateSandwich}){
                     {items.map((item, index) => {
                         return <SandwichFry item={item} removeItem={removeItem} itemNumber={index} updateItems={updateItems} />
                     })}
-                    
-                    <div className="addItemOption" onClick={() => {
-                        setItems( items.concat([{name: "", toppings: []}]))
-                        setItemBlank(items.length - 1)
-                    }}>
-                        <span>+ Add Item</span>
-                    </div>
+                    <ScrollLink className="scrollLink" to="nextPrevButtons" smooth={true} duration={100} spy={true}>
+                        <div className="addItemOption" onClick={() => {
+                            setItems( items.concat([{name: "", toppings: []}]))
+                            setItemBlank(items.length - 1)
+                        }}>
+                        
+                            <span href="">+ Add Item</span>
+                        </div>
+                    </ScrollLink>
+        
                     <NextPrevButtons canProceed={itemBlank === -1} step={onStep} top="10px" next={() => NextStep([], true)} prev={() => PrevStep()} />
+                    <ScrollDestination name="nextPrevButtons"></ScrollDestination>
                 </Grid.Row>
             </Grid>
         </div>
@@ -223,7 +228,6 @@ export default function OrderForm({updateSandwich}){
         { key: 'panel-3', title: `Step 2: Build your Sandwich ${onStep > 2 ? "✓": ""}`, content: { content: Level2Content } },
         { key: 'panel-4', title: `Step 3: Enter Payment Details: $${price}`, content: { content: Level3Content } },
     ]
-    console.log(items)
     return(
         <div className="OrderForm">
             <Accordion activeIndex={onStep} panels={rootPanels} styled />
