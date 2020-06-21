@@ -18,7 +18,7 @@ import FriesCheckout from "./vendors/FriesCheckout.component";
 
 const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
 
-export default function OrderForm({updateSandwich}){
+export default function OrderForm({ updateSandwiches }){
     const [phoneNumber, setPhoneNumber] = useState("")
     const [address, setAddress] = useState("")
     const [isTakeout, setIsTakeout] = useState(false)
@@ -27,7 +27,7 @@ export default function OrderForm({updateSandwich}){
     
     const [itemBlank, setItemBlank] = useState(0)
     const [orderSuccessful, setOrderSuccessful] = useState(false)
-    const [onStep, setOnStep] = useState(1)
+    const [onStep, setOnStep] = useState(0)
     const [validTakeout, setValidTakeout] = useState(false)
 
     const postOrders = () => {
@@ -96,6 +96,7 @@ export default function OrderForm({updateSandwich}){
         arr.splice(index, 1, item);
         setItems(arr);
         areItemsCompleted()
+        updateSandwiches(items)
     }
     const calculatePrice = () => {
         let price = 0;
@@ -104,30 +105,36 @@ export default function OrderForm({updateSandwich}){
         }
         return price.toFixed(2);
     }
+    const hasValue = (string) => {
+        if(string === undefined) return false;
+        if(noSpace(string) === "") return false
+        return true;
+    }
     const areItemsCompleted = () => {
         for(let i = 0; i < items.length; i++){
             let item = items[i];
-            if(noSpace(item.name) === ""){
+            console.log(item, i)
+            if(!hasValue(item.name)){
                 setItemBlank(i)
                 return;
             }
             if(item.orderType === "sandwich"){
-                if(item.sandwichType === "" ||
-                    item.cheeseType === "" ||
-                    item.spice === ""){
+                if(!hasValue(item.sandwichType) ||
+                    !hasValue(item.cheeseType) ||
+                    !hasValue(item.spice)){
                     setItemBlank(i)
                     return;
                 }
             }
             if(item.orderType === "fries"){
-                if(item.friesType === "" ||
+                if(!hasValue(item.friesType) ||
                 (item.friesType === "spicy" && item.spice === "none") ||
                 (item.friesType  === "belgian" && item.mayoType === "none")){
                     setItemBlank(i)
                     return;
                 }
             }
-            if(item.orderType === undefined){
+            if(!hasValue(item.orderType)){
                 setItemBlank(i)
                 return;
             }
@@ -135,8 +142,9 @@ export default function OrderForm({updateSandwich}){
         setItemBlank(-1)
     }
     const removeItem = (index) => {
-        setItems(lastItems=>lastItems.filter((item, i) => i !== index))
+        setItems(lastItems => lastItems.filter((item, i) => i !== index))
         areItemsCompleted()
+        updateSandwiches(items)
     }
     const Level1Content = (
         <div>

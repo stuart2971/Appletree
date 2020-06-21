@@ -1,12 +1,17 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 
 import "./SandwichAnimation.css"
 
 //Animation works by having a fixed starting position and then adds class to image to make it fall
 
-export default function SandwichAnimation({sandwich}){
+export default function SandwichAnimation({s, top}){
+    const [sandwich, setSandwich] = useState({sandwichType: "", cheeseType: "", toppings: []})
+
+    useEffect(() => {
+        setSandwich(s)
+    }, [s])
     return (
-        <div style={{position: "relative"}}>
+        <div style={{position: "relative", top: `${top * 400}px`}}>
             <img style={{ marginLeft: `291px`, marginTop: `20px`, transform: `scale(22)` }} className="abs" src={`images/Home/SandwichAnimation/back.png`} />
                 {sandwich.sandwichType === "burger" ? <Topping x="310" y="-10" scale="42" file="patty"/> : <div></div>}
                 {sandwich.sandwichType === "chicken" ? <Topping x="280" y="-45" scale="18" file="chicken"/> : <div></div>}
@@ -21,7 +26,7 @@ export default function SandwichAnimation({sandwich}){
                 {sandwich.toppings.includes("cucumber") ? <Topping x="280" y="60" scale="35" file="cucumber"/> : <div></div>}
                 {sandwich.toppings.includes("onion") ? <Topping x="270" y="50" scale="29" file="onion"/> : <div></div>}
 
-                {sandwich.spice !== "none" && sandwich.spice !== "" ? <Topping x="275" y="-30" scale="23" file="hot"/> : <div></div>}
+                {sandwich.spice !== "none" && sandwich.spice !== ""  && sandwich.spice !== undefined? <Topping x="275" y="-30" scale="23" file="hot"/> : <div></div>}
             <img style={{ marginLeft: `180px`, transform: `scale(21)`}} className="abs" src={`images/Home/SandwichAnimation/front.png`} />
         </div>
     )

@@ -42,7 +42,7 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
     const changeOrderType = (orderType) => {
         setOrderType(orderType);
         resetStates()
-        updateItems(itemNumber, {name: "", toppings: []})
+        updateItems(itemNumber, {name: item.name, toppings: []})
         setOption(0);
     }
     const goToNextStep = () => {
@@ -224,11 +224,11 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
         
         <div style={{margin: "10px 50px 10px 50px", display: "block"}}>  
             <form autofill="off">
-                <label onClick={() => { removeItem(itemNumber) }} style={{float: "left", marginTop: "3px"}}><Icon name="delete" />This item belongs to </label>
+                <label onClick={() => { removeItem(itemNumber) }} style={{float: "left", marginTop: "3px"}}><Icon name="delete" />{name.split(" ").join("") === "" ? <b>This item belongs to  </b>: <span>This item belongs to</span>}</label>
                 <input className="NameInput" value={name} fluid placeholder="(Enter a Name)" onChange={e => {
                     setName(e.target.value)
                     updateItems(itemNumber, {name: e.target.value, sandwichType, cheeseType, spice, toppings, price, orderType})
-                } } />
+                }} />
             </form>
             <div style={name.split(" ").join("") === "" ? {opacity: "0.2", pointerEvents: "none"}: {opacity: "1"}}>
                 <Menu fluid width={2}>
