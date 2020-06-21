@@ -10,14 +10,13 @@ import SandwichAnimation from "./vendors/SandwichAnimation.component"
 export default function OrderFormContainer(){
     const [sandwiches, setSandwiches] = useState([ {toppings: [], spice: ""} ])
     const [width, setWidth] = useState(window.innerWidth);
-    const breakpoint = 0;
+    const breakpoint = 1200;
     React.useEffect(() => {
         window.addEventListener("resize", () => setWidth(window.innerWidth));
     }, []);
     function updateSandwiches(items){
         let arr = [...items]
         setSandwiches(arr);
-        console.log(items.length, sandwiches.length)
     }
     function renderSandwichAnimation(){
         return sandwiches.map((sandwich, index) => {

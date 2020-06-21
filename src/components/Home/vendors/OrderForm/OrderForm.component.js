@@ -24,10 +24,11 @@ export default function OrderForm({ updateSandwiches }){
     const [isTakeout, setIsTakeout] = useState(false)
     const [price, setPrice] = useState("0.00")
     const [items, setItems] = useState([{name: "", toppings: []}])
+    const [numItems, setNumItems] = useState(1)
     
     const [itemBlank, setItemBlank] = useState(0)
     const [orderSuccessful, setOrderSuccessful] = useState(false)
-    const [onStep, setOnStep] = useState(0)
+    const [onStep, setOnStep] = useState(1)
     const [validTakeout, setValidTakeout] = useState(false)
 
     const postOrders = () => {
@@ -93,7 +94,8 @@ export default function OrderForm({ updateSandwiches }){
     }
     const updateItems = (index, item) => {
         let arr = items;
-        arr.splice(index, 1, item);
+        if(item === undefined) arr.splice(index, 1);
+        else arr.splice(index, 1, item);
         setItems(arr);
         areItemsCompleted()
         updateSandwiches(items)
@@ -107,13 +109,13 @@ export default function OrderForm({ updateSandwiches }){
     }
     const hasValue = (string) => {
         if(string === undefined) return false;
-        if(noSpace(string) === "") return false
+        if(noSpace(string) === "") return false;
+        if(string === "none") return false;
         return true;
     }
     const areItemsCompleted = () => {
         for(let i = 0; i < items.length; i++){
             let item = items[i];
-            console.log(item, i)
             if(!hasValue(item.name)){
                 setItemBlank(i)
                 return;
@@ -128,8 +130,8 @@ export default function OrderForm({ updateSandwiches }){
             }
             if(item.orderType === "fries"){
                 if(!hasValue(item.friesType) ||
-                (item.friesType === "spicy" && item.spice === "none") ||
-                (item.friesType  === "belgian" && item.mayoType === "none")){
+                (item.friesType === "spicy" && (!hasValue(item.spice))) ||
+                (item.friesType  === "belgian" && (!hasValue(item.mayoType)))){
                     setItemBlank(i)
                     return;
                 }
@@ -140,11 +142,6 @@ export default function OrderForm({ updateSandwiches }){
             }
         }
         setItemBlank(-1)
-    }
-    const removeItem = (index) => {
-        setItems(lastItems => lastItems.filter((item, i) => i !== index))
-        areItemsCompleted()
-        updateSandwiches(items)
     }
     const Level1Content = (
         <div>
@@ -187,12 +184,12 @@ export default function OrderForm({ updateSandwiches }){
             <Grid columns={1} centered>
                 <Grid.Row>
                     {items.map((item, index) => {
-                        return <SandwichFry item={item} removeItem={removeItem} itemNumber={index} updateItems={updateItems} />
+                        return <SandwichFry item={item} itemNumber={index} updateItems={updateItems} />
                     })}
                     <ScrollLink className="scrollLink" to="nextPrevButtons" smooth={true} duration={100} spy={true}>
                         <div className="addItemOption" onClick={() => {
                             setItems( items.concat([{name: "", toppings: []}]))
-                            setItemBlank(items.length - 1)
+                            setItemBlank(items.length - 1);
                         }}>
                             <span href="">+ Add Item</span>
                         </div>
@@ -231,7 +228,7 @@ export default function OrderForm({ updateSandwiches }){
     )
     const rootPanels = [
         { key: 'panel-1', title: `Step 1: Pickup or Delivery ${onStep > 0 ? "✓": ""}: ${isTakeout ? "Delivery" : "Pickup"}`, content: { content: Level1Content } },
-        { key: 'panel-3', title: `Step 2: Build your Sandwich ${onStep > 2 ? "✓": ""}`, content: { content: Level2Content } },
+        { key: 'panel-3', title: `Step 2: Build your Sandwich ${onStep > 1 ? "✓": ""}`, content: { content: Level2Content } },
         { key: 'panel-4', title: `Step 3: Enter Payment Details: $${price}`, content: { content: Level3Content } },
     ]
     return(

@@ -3,7 +3,7 @@ import { Accordion, Menu, Icon, Input } from 'semantic-ui-react'
 
 import "../OrderForm.css"
 
-export default function SandwichFry({item, itemNumber, updateItems, removeItem}){
+export default function SandwichFry({item, itemNumber, updateItems}){
     //Global options
     const [option, setOption] = useState(0);
     const [spice, setSpice] = useState("")
@@ -224,7 +224,7 @@ export default function SandwichFry({item, itemNumber, updateItems, removeItem})
         
         <div style={{margin: "10px 50px 10px 50px", display: "block"}}>  
             <form autofill="off">
-                <label onClick={() => { removeItem(itemNumber) }} style={{float: "left", marginTop: "3px"}}><Icon name="delete" />{name.split(" ").join("") === "" ? <b>This item belongs to  </b>: <span>This item belongs to</span>}</label>
+                <label onClick={() => { updateItems(itemNumber, undefined) }} style={{float: "left", marginTop: "3px"}}><Icon name="delete" />{name.split(" ").join("") === "" ? <b>This item belongs to  </b>: <span>This item belongs to</span>}</label>
                 <input className="NameInput" value={name} fluid placeholder="(Enter a Name)" onChange={e => {
                     setName(e.target.value)
                     updateItems(itemNumber, {name: e.target.value, sandwichType, cheeseType, spice, toppings, price, orderType})
