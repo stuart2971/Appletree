@@ -46,15 +46,14 @@ export default class AdminFriesCard extends React.Component{
         <Card>
           <Card.Content>
             <Image floated='right' size='mini' src={"/images/Orders/ProfileImages/" + this.props.imgFile} />
-            <Card.Header style={{ display: "inline-block" }}>{order.name}{order.isCompleted ? <Icon name="check circle" />: <div></div>}</Card.Header>
+            <Card.Header style={{ display: "inline-block" }}>{this.capitalize(order.name) + "'s "} Fries {order.isCompleted ? <Icon name="check circle" />: <div></div>}</Card.Header>
             {order.takeout ? <Label color="red" horizontal>TAKEOUT</Label>: <div></div>}
             <Card.Meta> {personContact}<br /> Queue: {this.props.queue}</Card.Meta>
             <Card.Description>
             <hr />
-              <b>{order.friesType == "spicy"? `${order.spice} spicy`: order.friesType} fries</b>
-              <b>{order.friesType == "belgian"? `Belgian Fries (${this.capitalize(order.mayoType)} Mayo)`: order.friesType + " Fries"}</b>
+              Fries Type: <b>{this.capitalize(order.friesType)}{order.friesType == "spicy"? `(${this.capitalize(order.spice)})` : ""} {order.friesType == "belgian"? `(${this.capitalize(order.mayoType)})`: ""}</b>
               <br />
-              ${order.price}
+              Price: ${order.price}
             </Card.Description>
           </Card.Content>
           {adminButtons}

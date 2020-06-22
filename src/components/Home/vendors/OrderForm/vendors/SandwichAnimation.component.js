@@ -11,7 +11,7 @@ export default function SandwichAnimation({s, top}){
         setSandwich(s)
     }, [s])
     return (
-        <div style={{position: "relative", top: `${top * 400}px`}}>
+        <div style={{top: `${top * 400}px`}} className="ArmEnter">
             <img style={{ marginLeft: `291px`, marginTop: `20px`, transform: `scale(22)` }} className="abs" src={`images/Home/SandwichAnimation/back.png`} />
                 {sandwich.sandwichType === "burger" ? <Topping x="310" y="-10" scale="42" file="patty"/> : <div></div>}
                 {sandwich.sandwichType === "chicken" ? <Topping x="280" y="-45" scale="18" file="chicken"/> : <div></div>}

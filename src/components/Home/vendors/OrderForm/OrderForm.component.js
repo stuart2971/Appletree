@@ -28,7 +28,7 @@ export default function OrderForm({ updateSandwiches }){
     
     const [itemBlank, setItemBlank] = useState(0)
     const [orderSuccessful, setOrderSuccessful] = useState(false)
-    const [onStep, setOnStep] = useState(1)
+    const [onStep, setOnStep] = useState(0)
     const [validTakeout, setValidTakeout] = useState(false)
 
     const postOrders = () => {
@@ -110,12 +110,16 @@ export default function OrderForm({ updateSandwiches }){
     const hasValue = (string) => {
         if(string === undefined) return false;
         if(noSpace(string) === "") return false;
-        if(string === "none") return false;
         return true;
     }
     const areItemsCompleted = () => {
+        if(items.length === 0) {
+            setItemBlank(0)
+            return;
+        }
         for(let i = 0; i < items.length; i++){
             let item = items[i];
+            console.log(item)
             if(!hasValue(item.name)){
                 setItemBlank(i)
                 return;
@@ -130,8 +134,8 @@ export default function OrderForm({ updateSandwiches }){
             }
             if(item.orderType === "fries"){
                 if(!hasValue(item.friesType) ||
-                (item.friesType === "spicy" && (!hasValue(item.spice))) ||
-                (item.friesType  === "belgian" && (!hasValue(item.mayoType)))){
+                (item.friesType === "spicy" && (item.spice === undefined || item.spice === "none")) ||
+                (item.friesType  === "belgian" && (item.mayoType === undefined || item.mayoType === "none"))){
                     setItemBlank(i)
                     return;
                 }
@@ -186,15 +190,14 @@ export default function OrderForm({ updateSandwiches }){
                     {items.map((item, index) => {
                         return <SandwichFry item={item} itemNumber={index} updateItems={updateItems} />
                     })}
+                    {items.length === 0 ? <p>You don't have any items :(</p>:<div></div>}
                     <ScrollLink className="scrollLink" to="nextPrevButtons" smooth={true} duration={100} spy={true}>
                         <div className="addItemOption" onClick={() => {
-                            setItems( items.concat([{name: "", toppings: []}]))
-                            setItemBlank(items.length - 1);
+                            updateItems(items.length, {name: "", toppings:[]})
                         }}>
                             <span href="">+ Add Item</span>
                         </div>
                     </ScrollLink>
-        
                     <NextPrevButtons canProceed={itemBlank === -1} step={onStep} top="10px" next={() => NextStep([], true)} prev={() => PrevStep()} />
                     <ScrollDestination name="nextPrevButtons"></ScrollDestination>
                 </Grid.Row>

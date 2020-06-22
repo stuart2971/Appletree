@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Image, Icon } from 'semantic-ui-react'
 
-const CustomerFriesCard = ({ name, queue, imgFile, isCompleted }) => {
+export default function CustomerCard ({ name, queue, imgFile, isCompleted }){
     return(
       <Card.Group>
         <Card>
@@ -14,4 +14,3 @@ const CustomerFriesCard = ({ name, queue, imgFile, isCompleted }) => {
       </Card.Group>
     )
 }
-export default CustomerFriesCard
