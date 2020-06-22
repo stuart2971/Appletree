@@ -216,9 +216,13 @@ export default function OrderForm({ updateSandwiches }){
                 }
             })}
             <h2>Cost: ${calculatePrice()}</h2>
-            <Elements stripe={promise}>
-                {onStep === 2 ? <CheckoutForm price={parseFloat(calculatePrice()) * 100} onComplete={postOrders}/> : <div></div>}
-            </Elements>
+            
+            {onStep === 2 ? 
+                <Elements stripe={promise}>
+                    <CheckoutForm price={parseFloat(calculatePrice()) * 100} onComplete={postOrders}/> 
+                </Elements>
+            : <div></div>}
+            
             {orderSuccessful ? 
                 <Message positive onClick={redirect}>
                     <Message.Header>Order Placed!</Message.Header>
