@@ -25,7 +25,7 @@ export default function OrderFormContainer(){
     }
     return(
         <section className="section-padding orderFormContainer">
-            <div className="container">
+            <div className="container" style={{position: "relative"}}>
                 {width > breakpoint ? 
                     <div style={{marginTop: "200px", float: "left", width: "100px", height: "100px"}}>
                         {renderSandwichAnimation()}

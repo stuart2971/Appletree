@@ -29,6 +29,11 @@ export default function SandwichFry({item, itemNumber, updateItems}){
     function capitalize(word) { 
         if(word) return word[0].toUpperCase() + word.slice(1); 
     }
+    const hasValue = (string) => {
+        if(string === undefined) return false;
+        if(string.split(" ").join("") === "") return false;
+        return true;
+    }
     //Any new states that is part of the order should be put here
     const resetStates = () => {
         setSandwichType("")
@@ -140,9 +145,9 @@ export default function SandwichFry({item, itemNumber, updateItems}){
             </div>
         )
         panels = [
-            { key: 'panel-2a', title: `Sandwich Type ${sandwichType !== "" ? "✓": ""}: ${sandwichType !== "" && sandwichType !== undefined ? capitalize(sandwichType): "Not Chosen"}`, content: {content: sandwichTypeContent} },
-            { key: 'panel-2b', title: `Cheese Type ${cheeseType !== "" ? "✓": ""}: ${cheeseType !== "" && cheeseType !== undefined? capitalize(cheeseType): "Not Chosen"}`, content: {content: cheeseTypeContent} },
-            { key: 'panel-2c', title: `Spice Level ${spice !== "" && spice !== undefined? "✓": ""}: ${spice !== "" && spice !== undefined ? capitalize(spice) : "Not Chosen"}`, content: {content: spiceTypeContent} },
+            { key: 'panel-2a', title: `Sandwich Type ${hasValue(sandwichType) ? "✓": ""}: ${sandwichType !== "" && sandwichType !== undefined ? capitalize(sandwichType): "Not Chosen"}`, content: {content: sandwichTypeContent} },
+            { key: 'panel-2b', title: `Cheese Type ${hasValue(cheeseType) !== "" ? "✓": ""}: ${cheeseType !== "" && cheeseType !== undefined? capitalize(cheeseType): "Not Chosen"}`, content: {content: cheeseTypeContent} },
+            { key: 'panel-2c', title: `Spice Level ${hasValue(spice) ? "✓": ""}: ${spice !== "" && spice !== undefined ? capitalize(spice) : "Not Chosen"}`, content: {content: spiceTypeContent} },
             { key: 'panel-2d', title: `Veggies: ${toppings.length === 0 ? "None" : toppings.map(topping => " " + capitalize(topping))}`, content: {content: veggiesTypeContent} }
         ]
     }else if(orderType === "fries"){
@@ -208,8 +213,8 @@ export default function SandwichFry({item, itemNumber, updateItems}){
         )
         panels = [
             { key: 'panel-1a', title: `Fries Type: 
-                                        ${friesType === undefined || friesType === "" ? "Not Chosen" : capitalize(friesType)} 
-                                        ${spice === undefined || spice === "none" || !spice? "" : `(${capitalize(spice)})`} 
+                                        ${!hasValue(friesType) ? "Not Chosen" : capitalize(friesType)} 
+                                        ${spice === undefined || spice === "none" || !spice ? "" : `(${capitalize(spice)})`} 
                                         ${mayoType === undefined || mayoType === "none" || !mayoType ? "": `(${capitalize(mayoType)} Mayo)`}`
                                         , content: {content: fryOptions} },
         ]

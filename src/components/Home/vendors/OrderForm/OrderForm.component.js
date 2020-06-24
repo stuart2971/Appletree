@@ -24,7 +24,6 @@ export default function OrderForm({ updateSandwiches }){
     const [isTakeout, setIsTakeout] = useState(false)
     const [price, setPrice] = useState("0.00")
     const [items, setItems] = useState([{name: "", toppings: []}])
-    const [numItems, setNumItems] = useState(1)
     
     const [itemBlank, setItemBlank] = useState(0)
     const [orderSuccessful, setOrderSuccessful] = useState(false)
@@ -45,6 +44,7 @@ export default function OrderForm({ updateSandwiches }){
         }
         for(let i = 0; i < items.length; i++){
             let completeOrder = {...items[i], ...orderInfo}
+            console.log(completeOrder)
             if(items[i].sandwichType !== undefined){
                 insertSandwich(completeOrder, (res) => {
                     if(res.status == 200)
@@ -235,8 +235,8 @@ export default function OrderForm({ updateSandwiches }){
     )
     const rootPanels = [
         { key: 'panel-1', title: `Step 1: Pickup or Delivery ${onStep > 0 ? "✓": ""}: ${isTakeout ? "Delivery" : "Pickup"}`, content: { content: Level1Content } },
-        { key: 'panel-3', title: `Step 2: Build your Sandwich ${onStep > 1 ? "✓": ""}`, content: { content: Level2Content } },
-        { key: 'panel-4', title: `Step 3: Enter Payment Details: $${price}`, content: { content: Level3Content } },
+        { key: 'panel-3', title: `Step 2: Build your Sandwich ${onStep > 1 ? `✓ (${items.length})`: ""}`, content: { content: Level2Content } },
+        { key: 'panel-4', title: `Step 3: Enter Payment Details`, content: { content: Level3Content } },
     ]
     return(
         <div className="OrderForm">
