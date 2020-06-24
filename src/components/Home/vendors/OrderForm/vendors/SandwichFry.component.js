@@ -145,9 +145,9 @@ export default function SandwichFry({item, itemNumber, updateItems}){
             </div>
         )
         panels = [
-            { key: 'panel-2a', title: `Sandwich Type ${hasValue(sandwichType) ? "✓": ""}: ${sandwichType !== "" && sandwichType !== undefined ? capitalize(sandwichType): "Not Chosen"}`, content: {content: sandwichTypeContent} },
-            { key: 'panel-2b', title: `Cheese Type ${hasValue(cheeseType) !== "" ? "✓": ""}: ${cheeseType !== "" && cheeseType !== undefined? capitalize(cheeseType): "Not Chosen"}`, content: {content: cheeseTypeContent} },
-            { key: 'panel-2c', title: `Spice Level ${hasValue(spice) ? "✓": ""}: ${spice !== "" && spice !== undefined ? capitalize(spice) : "Not Chosen"}`, content: {content: spiceTypeContent} },
+            { key: 'panel-2a', title: `Sandwich Type ${hasValue(sandwichType) ? "✓": ""}: ${hasValue(sandwichType) ? capitalize(sandwichType): "Not Chosen"}`, content: {content: sandwichTypeContent} },
+            { key: 'panel-2b', title: `Cheese Type ${hasValue(cheeseType)? "✓": ""}: ${hasValue(cheeseType) ? capitalize(cheeseType): "Not Chosen"}`, content: {content: cheeseTypeContent} },
+            { key: 'panel-2c', title: `Spice Level ${hasValue(spice) ? "✓": ""}: ${hasValue(spice) ? capitalize(spice) : "Not Chosen"}`, content: {content: spiceTypeContent} },
             { key: 'panel-2d', title: `Veggies: ${toppings.length === 0 ? "None" : toppings.map(topping => " " + capitalize(topping))}`, content: {content: veggiesTypeContent} }
         ]
     }else if(orderType === "fries"){
