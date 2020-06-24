@@ -16,7 +16,7 @@ import SandwichCheckout from "./vendors/SandwichCheckout.component";
 import FriesCheckout from "./vendors/FriesCheckout.component";
 
 
-const promise = loadStripe("pk_test_7fLLDEMnamcBLNc24T2VCq5d");
+const promise = loadStripe("pk_live_jJHt0rweBXTMfZRtpLqaB9PO");
 
 export default function OrderForm({ updateSandwiches }){
     const [phoneNumber, setPhoneNumber] = useState("")
