@@ -1,6 +1,5 @@
-html{
-    font-family: 'Nunito', sans-serif;
-}
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600");
+@import url("https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700");
 
 body {
     color: #888;
@@ -829,9 +828,7 @@ h4,
     font-size: 35px;
     font-weight: 600;
     margin-bottom: 25px;
-    line-height: 0.929;
-    color: black;
-    letter-spacing: 2px;
+    line-height: 0.929
 }
 
 @media (min-width: 840px) {
@@ -934,7 +931,6 @@ h4,
 
 .hero-wrapper {
     position: relative;
-    height: 80%;
 }
 
 .hero-wrapper .social-icons {
@@ -3118,7 +3114,10 @@ select {
 .food-card{
     margin:10px;
 }
-
+img{
+    width: 30px;
+    height: 30px;
+}
 #HomeImage{
     width: 30%;
     height: 30%;
@@ -3135,7 +3134,4 @@ select {
         width: 70%;
         left: 50%;
     }
-}
-#HomeOrderButton{
-    text-align: center;
 }

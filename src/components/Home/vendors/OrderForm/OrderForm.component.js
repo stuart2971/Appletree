@@ -200,7 +200,6 @@ export default function OrderForm({ updateSandwiches }){
                     </ScrollLink>
                     <NextPrevButtons canProceed={itemBlank === -1} step={onStep} top="10px" next={() => NextStep([], true)} prev={() => PrevStep()} />
                     <ScrollDestination name="nextPrevButtons"></ScrollDestination>
-                    
                 </Grid.Row>
             </Grid>
         </div>
@@ -242,7 +241,6 @@ export default function OrderForm({ updateSandwiches }){
     return(
         <div className="OrderForm">
             <Accordion activeIndex={onStep} panels={rootPanels} styled />
-            <ScrollDestination name="goToStep"></ScrollDestination>
         </div>
     )
 }

@@ -24,20 +24,19 @@ export default function OrderFormContainer(){
         })
     }
     return(
-        <section id="OrderForm" className="section-padding orderFormContainer">
+        <section className="section-padding orderFormContainer">
             <div className="container" style={{position: "relative"}}>
-            <div>
-                <div className="section-intro">
-                    <h4 className="intro-title">Make an Order</h4>
-                    <h2 className="mb-3">Full Customization</h2>
-                </div>
-                <p>We allow you to fully customize your order to allow you to have<br />the exact order you want.</p> 
-            </div>
                 {width > breakpoint ? 
                     <div style={{marginTop: "200px", float: "left", width: "100px", height: "100px"}}>
                         {renderSandwichAnimation()}
                     </div>
-                    : <div></div>
+                    : <div>
+                        <div className="section-intro">
+                            <h4 className="intro-title">Make an Order</h4>
+                            <h2 className="mb-3">Create your own custom sandwich</h2>
+                        </div>
+                        <p>Please fill out all the blanks. A phone number will be required in order to confirm your order once it has been made. </p> 
+                    </div>
                 }
                 <OrderForm updateSandwiches={updateSandwiches} />         
             </div>

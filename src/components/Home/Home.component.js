@@ -1,5 +1,4 @@
 import React from "react"
-import {Menu} from 'semantic-ui-react'
 
 import "./Home.css";
 import "./styles/vendors/bootstrap.min.css";
@@ -14,17 +13,16 @@ import CardGrid from "./vendors/FoodItemCards/CardGrid.component";
 import MenuTabular from "./vendors/MenuItem/MenuTabular.component";
 import FadeInText from "./vendors/Animations/FadeInText/FadeInText.component";
 
+
 export default class Home extends React.Component {
     render() {
         return (
             <div>
                 <section className="hero-banner">
                     <div className="hero-wrapper">
-                    
-
                         <div className="hero-left">
                             <FadeInText />
-                            <a id="HomeOrderButton" className="button button-hero button-shadow" href="#OrderForm">Order Now</a>
+                                <a className="button button-hero button-shadow" href="#OrderForm">Order Now</a>
                             <ul className="hero-info d-none d-lg-block">
                                 <li>
                                     <img src="/images/Home/fas-service-icon.png" />
@@ -36,10 +34,9 @@ export default class Home extends React.Component {
                                     <h4>Fresh Food</h4>
                                 </li>
                             </ul>
-                            
                         </div>
                         <img id="HomeImage" src="/images/Home/hero-banner1.jpg"/>
-
+                        
                         <ul className="social-icons d-none d-lg-block">
                             <li><a href="#"><i className="ti-facebook"></i></a></li>
                             <li><a href="#"><i className="ti-twitter"></i></a></li>
@@ -54,7 +51,7 @@ export default class Home extends React.Component {
                             <div className="col-md-6 col-xl-6 mb-5 mb-md-0 pb-5 pb-md-0">
                                 <div className="img-styleBox">
                                     <div className="styleBox-border">
-                                        <img className="styleBox-img1 img-fluid" src="/images/Home/storefront.jpg" alt="" />
+                                        <img style={{width: "100%"}} className="styleBox-img1 img-fluid" src="/images/Home/storefront.jpg" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +82,7 @@ export default class Home extends React.Component {
                     <div className="container">
                         <div className="row no-gutters">
                             <div className="col-sm">
-                                <img className="card-img rounded-0" src="/images/Home/offer-img.jpg" alt="" />
+                                <img style={{height: "100%"}} className="card-img rounded-0" src="/images/Home/offer-img.jpg" alt="" />
                             </div>
                             <div className="col-sm">
                                 <div className="offer-card offer-card-position">
