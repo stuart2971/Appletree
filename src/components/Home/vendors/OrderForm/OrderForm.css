@@ -248,5 +248,5 @@ html {
 }
 .orderFormContainer{
     margin-top: 1em;
-    height: 800px;
+    min-height: 600px;
 } 

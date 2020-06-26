@@ -1,4 +1,5 @@
 import React from "react"
+import {Menu} from 'semantic-ui-react'
 
 import "./Home.css";
 import "./styles/vendors/bootstrap.min.css";
@@ -11,6 +12,7 @@ import "./styles/scss/style.scss";
 import OrderFormContainer from "./vendors/OrderForm/OrderFormContainer.component";
 import CardGrid from "./vendors/FoodItemCards/CardGrid.component";
 import MenuTabular from "./vendors/MenuItem/MenuTabular.component";
+import FadeInText from "./vendors/Animations/FadeInText/FadeInText.component";
 
 export default class Home extends React.Component {
     render() {
@@ -18,11 +20,11 @@ export default class Home extends React.Component {
             <div>
                 <section className="hero-banner">
                     <div className="hero-wrapper">
+                    
+
                         <div className="hero-left">
-                            <h1 className="hero-title">Foods the <br /> most precious things</h1>
-                            <div className="d-sm-flex flex-wrap">
-                                <a className="button button-hero button-shadow" href="#OrderForm">Order Now</a>
-                            </div>
+                            <FadeInText />
+                            <a id="HomeOrderButton" className="button button-hero button-shadow" href="#OrderForm">Order Now</a>
                             <ul className="hero-info d-none d-lg-block">
                                 <li>
                                     <img src="/images/Home/fas-service-icon.png" />
@@ -34,9 +36,10 @@ export default class Home extends React.Component {
                                     <h4>Fresh Food</h4>
                                 </li>
                             </ul>
+                            
                         </div>
+                        <img id="HomeImage" src="/images/Home/hero-banner1.jpg"/>
 
-                        
                         <ul className="social-icons d-none d-lg-block">
                             <li><a href="#"><i className="ti-facebook"></i></a></li>
                             <li><a href="#"><i className="ti-twitter"></i></a></li>

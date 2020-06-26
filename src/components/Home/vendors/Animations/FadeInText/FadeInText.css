@@ -1,0 +1,52 @@
+#root{
+  width: 100%;
+
+}
+
+.trails-main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 70px;
+  float:left;
+}
+@media only screen and (max-width: 1100px) {
+  .trails-main {
+    left: 50%;
+  }
+}
+@media only screen and (max-width: 650px) {
+  .trails-main {
+    font-size: 0.8em;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .trails-main {
+    font-size: 0.6em;
+    left: 0%;
+
+  }
+}
+@media only screen and (max-width: 385px) {
+  .trails-main {
+    font-size: 0.4em;
+    left: 0%;
+  }
+}
+.trails-text {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  line-height: 80px;
+  color: black;
+  font-size: 8em;
+  font-weight: 800;
+  text-transform: uppercase;
+  will-change: transform, opacity;
+}
+
+
