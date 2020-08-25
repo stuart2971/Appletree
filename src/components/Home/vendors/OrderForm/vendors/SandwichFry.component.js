@@ -85,13 +85,13 @@ export default function SandwichFry({item, itemNumber, updateItems}){
     if(orderType === "sandwich"){ 
         const sandwichTypeContent = (
             <div style={{ display: "inline-block" }}>
-                <div className={sandwichType === "burger" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => changeSandwichType("burger", "4.87")}>
+                <div className={sandwichType === "burger" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => changeSandwichType("burger", "6.19")}>
                     <span>Burger</span>
                 </div>
-                <div className={sandwichType === "chicken" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => changeSandwichType("chicken", "4.87")}>
+                <div className={sandwichType === "chicken" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => changeSandwichType("chicken", "6.19")}>
                     <span>Chicken</span>
                 </div>
-                <div className={sandwichType === "falafel" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => changeSandwichType("falafel", "3.81")}>
+                <div className={sandwichType === "falafel" ? "sandwichOptionSelected" :"sandwichOption"} onClick={() => changeSandwichType("falafel", "4.43")}>
                     <span>Falafel</span>
                 </div>
             </div>

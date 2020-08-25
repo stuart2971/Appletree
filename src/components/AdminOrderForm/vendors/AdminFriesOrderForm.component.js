@@ -56,10 +56,10 @@ export default class AdminSandwichOrderForm extends React.Component{
             <Input value={this.state.name} className={this.state.name.split(" ").join("") == "" & attempts ? "missing_field": ""} fluid placeholder="First and Last Name" onChange={this.updateName.bind(this)} />
             <Grid columns="equal">
                 <Grid.Row className={this.state.friesType == "" & attempts ? "missing_field": ""}>
-                    <Grid.Column><Image className={this.state.friesType == "regular" ? "selected": ""} onClick={() => this.setState({ friesType: "regular", spice: "None", price: "4.00" })} src="/images/Home/regular.jpeg"/></Grid.Column>
-                    <Grid.Column><Image className={this.state.friesType == "spicy" ? "selected": ""} onClick={() => this.setState({ friesType: "spicy", spice: "", price: "4.50" })} src="/images/Home/spicyFries.jpg"/></Grid.Column>
-                    <Grid.Column><Image className={this.state.friesType == "belgian" ? "selected": ""} onClick={() => this.setState({ friesType: "belgian", spice: "None", price: "5.00" })} src="/images/Home/belgian.jpg"/></Grid.Column>
-                    <Grid.Column><Image className={this.state.friesType == "poutine" ? "selected": ""} onClick={() => this.setState({ friesType: "poutine", spice: "None", price: "5.50" })} src="/images/Home/poutine.jpg"/></Grid.Column>
+                    <Grid.Column><Image className={this.state.friesType == "regular" ? "selected": ""} onClick={() => this.setState({ friesType: "regular", spice: "None", price: "2.88" })} src="/images/Home/regular.jpeg"/></Grid.Column>
+                    <Grid.Column><Image className={this.state.friesType == "spicy" ? "selected": ""} onClick={() => this.setState({ friesType: "spicy", spice: "", price: "2.88" })} src="/images/Home/spicyFries.jpg"/></Grid.Column>
+                    <Grid.Column><Image className={this.state.friesType == "belgian" ? "selected": ""} onClick={() => this.setState({ friesType: "belgian", spice: "None", price: "3.58" })} src="/images/Home/belgian.jpg"/></Grid.Column>
+                    <Grid.Column><Image className={this.state.friesType == "poutine" ? "selected": ""} onClick={() => this.setState({ friesType: "poutine", spice: "None", price: "4.43" })} src="/images/Home/poutine.jpg"/></Grid.Column>
                 </Grid.Row>
                 {spiceOptions}
             <button className="button border-0" onClick={this.SendOrder.bind(this)}>Send Order</button>

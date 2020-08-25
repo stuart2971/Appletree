@@ -67,9 +67,9 @@ export default class AdminSandwichOrderForm extends React.Component{
             <Input value={this.state.name} className={this.state.name.split(" ").join("") == "" & attempts ? "missing_field": ""} fluid placeholder="First and Last Name" onChange={this.updateName.bind(this)} />
             <Grid columns="equal">
                 <Grid.Row className={this.state.sandwichType == "" & attempts ? "missing_field": ""}>
-                    <Grid.Column><Image className={this.state.sandwichType == "burger" ? "selected": ""} onClick={() => this.setState({ sandwichType: "burger", price: "4.87" })} src="/images/Home/featured2.jpg"/></Grid.Column>
-                    <Grid.Column><Image className={this.state.sandwichType == "chicken" ? "selected": ""} onClick={() => this.setState({ sandwichType: "chicken", price: "4.87" })} src="/images/Home/chicken_sandwich.JPG"/></Grid.Column>
-                    <Grid.Column><Image className={this.state.sandwichType == "falafel" ? "selected": ""} onClick={() => this.setState({ sandwichType: "falafel", price: "3.81" })} src="/images/Home/falafel.jpg"/></Grid.Column>
+                    <Grid.Column><Image className={this.state.sandwichType == "burger" ? "selected": ""} onClick={() => this.setState({ sandwichType: "burger", price: "6.19" })} src="/images/Home/featured2.jpg"/></Grid.Column>
+                    <Grid.Column><Image className={this.state.sandwichType == "chicken" ? "selected": ""} onClick={() => this.setState({ sandwichType: "chicken", price: "6.19" })} src="/images/Home/chicken_sandwich.JPG"/></Grid.Column>
+                    <Grid.Column><Image className={this.state.sandwichType == "falafel" ? "selected": ""} onClick={() => this.setState({ sandwichType: "falafel", price: "4.43" })} src="/images/Home/falafel.jpg"/></Grid.Column>
                 </Grid.Row>
                 <Grid.Row className={this.state.cheeseType == "" & attempts ? "missing_field": ""}>
                     <Grid.Column><Image className={this.state.cheeseType == "none" ? "selected": ""} onClick={() => this.setState({ cheeseType: "none" })} src="/images/Home/none.png"/></Grid.Column>
