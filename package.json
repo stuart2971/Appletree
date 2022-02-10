@@ -13,7 +13,7 @@
     "dotenv": "^8.2.0",
     "http-proxy-middleware": "^1.0.4",
     "neumorphic-ui": "^1.1.0",
-    "node-sass": "^4.14.0",
+    "node-sass": "^7.0.0",
     "pusher-js": "^6.0.2",
     "react": "^16.12.0",
     "react-dom": "^16.13.1",
